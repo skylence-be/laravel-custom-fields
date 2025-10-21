@@ -22,9 +22,18 @@
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Name <span class="text-red-500">*</span>
                     </label>
-                    <input type="text"
-                           wire:model.live.debounce.300ms="form.name"
-                           class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 @error('form.name') border-red-500 @enderror">
+                    <div class="flex gap-2">
+                        <input type="text"
+                               wire:model.live.debounce.300ms="form.name"
+                               class="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 @error('form.name') border-red-500 @enderror">
+                        @if(count($availableLocales) > 0)
+                            <button type="button"
+                                    wire:click="copyNameToTranslations"
+                                    class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 whitespace-nowrap text-sm">
+                                Copy to Translations
+                            </button>
+                        @endif
+                    </div>
                     @error('form.name')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
@@ -66,6 +75,43 @@
                 </div>
             </div>
         </div>
+
+        @if(count($availableLocales) > 0)
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Translations</h2>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                    Provide translations for field names in different languages.
+                </p>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Translated Field Names
+                    </label>
+                    @php
+                        $languageNames = [
+                            'en' => 'English',
+                            'nl' => 'Dutch',
+                            'fr' => 'French',
+                            'de' => 'German',
+                            'es' => 'Spanish',
+                        ];
+                    @endphp
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                        @foreach($form->translations as $index => $translation)
+                            <div>
+                                <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">
+                                    {{ $languageNames[$translation['locale']] ?? strtoupper($translation['locale']) }}
+                                </label>
+                                <input type="text"
+                                       wire:model.live.debounce.300ms="form.translations.{{ $index }}.name"
+                                       placeholder="Translation..."
+                                       class="w-full px-3 py-2 text-sm border rounded-lg focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600">
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        @endif
 
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
             <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Field Type Configuration</h2>
@@ -131,15 +177,49 @@
                     </div>
 
                     @if(!empty($form->options))
-                        <div class="space-y-2">
-                            @foreach($form->options as $index => $option)
-                                <div class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded">
-                                    <span class="flex-1 text-sm text-gray-700 dark:text-gray-300">{{ $option }}</span>
-                                    <button type="button"
-                                            wire:click="removeOption({{ $index }})"
-                                            class="text-red-600 hover:text-red-800 text-sm">
-                                        Remove
-                                    </button>
+                        <div class="space-y-3">
+                            @foreach($form->options as $optionIndex => $option)
+                                <div class="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="flex-1 text-sm font-medium text-gray-900 dark:text-gray-100">{{ $option }}</span>
+                                        @if(count($availableLocales) > 0)
+                                            <button type="button"
+                                                    wire:click="copyOptionToTranslations({{ $optionIndex }})"
+                                                    class="px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 text-xs whitespace-nowrap">
+                                                Copy to Translations
+                                            </button>
+                                        @endif
+                                        <button type="button"
+                                                wire:click="removeOption({{ $optionIndex }})"
+                                                class="text-red-600 hover:text-red-800 text-sm">
+                                            Remove
+                                        </button>
+                                    </div>
+
+                                    @if(count($availableLocales) > 0)
+                                        @php
+                                            $languageNames = [
+                                                'en' => 'English',
+                                                'nl' => 'Dutch',
+                                                'fr' => 'French',
+                                                'de' => 'German',
+                                                'es' => 'Spanish',
+                                            ];
+                                        @endphp
+                                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 mt-2">
+                                            @foreach($form->translations as $translationIndex => $translation)
+                                                <div>
+                                                    <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">
+                                                        {{ $languageNames[$translation['locale']] ?? strtoupper($translation['locale']) }}
+                                                    </label>
+                                                    <input type="text"
+                                                           wire:model.live.debounce.300ms="form.translations.{{ $translationIndex }}.options.{{ $optionIndex }}"
+                                                           placeholder="Translation..."
+                                                           class="w-full px-2 py-1 text-sm border rounded focus:ring-1 focus:ring-blue-500 dark:bg-gray-600 dark:text-white dark:border-gray-500">
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
                                 </div>
                             @endforeach
                         </div>
@@ -148,6 +228,24 @@
                     @error('form.options')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
+                </div>
+            @endif
+
+            @if(in_array($form->type, ['select', 'radio']) && config('custom-fields.enable_default_options'))
+                <div class="mt-6">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Default Option
+                    </label>
+                    <select wire:model.live="form.default_option"
+                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600">
+                        <option value="">None (no default)</option>
+                        @foreach($form->options as $option)
+                            <option value="{{ $option }}">{{ $option }}</option>
+                        @endforeach
+                    </select>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        This option will be pre-selected when the field is displayed.
+                    </p>
                 </div>
             @endif
         </div>

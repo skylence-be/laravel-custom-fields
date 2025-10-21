@@ -67,6 +67,30 @@ class FieldEdit extends Component
         $this->form->removeValidationRule($index);
     }
 
+    public function copyNameToTranslations(): void
+    {
+        if (empty($this->form->name)) {
+            return;
+        }
+
+        foreach ($this->form->translations as $index => $translation) {
+            $this->form->translations[$index]['name'] = $this->form->name;
+        }
+    }
+
+    public function copyOptionToTranslations(int $optionIndex): void
+    {
+        if (! isset($this->form->options[$optionIndex])) {
+            return;
+        }
+
+        $optionValue = $this->form->options[$optionIndex];
+
+        foreach ($this->form->translations as $index => $translation) {
+            $this->form->translations[$index]['options'][$optionIndex] = $optionValue;
+        }
+    }
+
     public function save(): void
     {
         $this->form->update();
@@ -118,6 +142,7 @@ class FieldEdit extends Component
             'customizableTypes' => $customizableTypes,
             'simpleValidationRules' => $this->form->getAvailableValidationRules(),
             'parametrizedValidationRules' => $this->form->getParametrizedValidationRules(),
+            'availableLocales' => $this->form->getAvailableLocales(),
         ]);
     }
 }

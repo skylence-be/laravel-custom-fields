@@ -24,6 +24,8 @@ class FieldForm extends Form
 
     public array $options = [];
 
+    public ?string $default_option = null;
+
     public bool $use_in_table = false;
 
     public array $validation_rules = [];
@@ -33,6 +35,8 @@ class FieldForm extends Form
     public string $customizable_type = '';
 
     public int $sort = 0;
+
+    public array $translations = [];
 
     public function rules(): array
     {
@@ -51,10 +55,15 @@ class FieldForm extends Form
             'input_type' => 'nullable|string',
             'is_multiselect' => 'boolean',
             'options' => 'nullable|array',
+            'default_option' => 'nullable|string',
             'use_in_table' => 'boolean',
             'validation_rules' => 'nullable|array',
             'customizable_type' => 'required|string',
             'sort' => 'nullable|integer|min:0',
+            'translations' => 'nullable|array',
+            'translations.*.locale' => 'required|string|max:10',
+            'translations.*.name' => 'required|string|max:255',
+            'translations.*.options' => 'nullable|array',
         ];
     }
 
@@ -77,18 +86,44 @@ class FieldForm extends Form
         $this->input_type = $field->input_type?->value ?? 'text';
         $this->is_multiselect = $field->is_multiselect;
         $this->options = $field->options ?? [];
+        $this->default_option = $field->default_option;
         $this->use_in_table = $field->use_in_table;
         $this->form_settings = $field->form_settings ?? [];
         $this->validation_rules = $field->form_settings['validation_rules'] ?? [];
         $this->customizable_type = $field->customizable_type;
         $this->sort = $field->sort;
+
+        // Load existing translations and ensure all locales are represented
+        $existingTranslations = $field->translations->keyBy('locale');
+        $this->translations = [];
+
+        foreach ($this->getAvailableLocales() as $locale) {
+            if (isset($existingTranslations[$locale])) {
+                $this->translations[] = [
+                    'locale' => $locale,
+                    'name' => $existingTranslations[$locale]->name,
+                    'options' => $existingTranslations[$locale]->options ?? [],
+                ];
+            } else {
+                $this->translations[] = [
+                    'locale' => $locale,
+                    'name' => '',
+                    'options' => [],
+                ];
+            }
+        }
     }
 
     public function store(): Field
     {
         $this->validate();
 
-        return Field::create($this->getFieldData());
+        $field = Field::create($this->getFieldData());
+
+        // Save translations
+        $this->saveTranslations($field);
+
+        return $field;
     }
 
     public function update(): void
@@ -96,6 +131,30 @@ class FieldForm extends Form
         $this->validate($this->updateRules());
 
         $this->field->update($this->getUpdateData());
+
+        // Save translations
+        $this->saveTranslations($this->field);
+    }
+
+    protected function saveTranslations(Field $field): void
+    {
+        if (empty($this->translations)) {
+            return;
+        }
+
+        foreach ($this->translations as $translation) {
+            // Save translation if name or options are provided
+            $hasName = ! empty($translation['name']);
+            $hasOptions = ! empty($translation['options']) && is_array($translation['options']) && count(array_filter($translation['options'])) > 0;
+
+            if (! empty($translation['locale']) && ($hasName || $hasOptions)) {
+                $field->setTranslation(
+                    $translation['locale'],
+                    $translation['name'] ?? '',
+                    $translation['options'] ?? null
+                );
+            }
+        }
     }
 
     protected function updateRules(): array
@@ -105,9 +164,14 @@ class FieldForm extends Form
             'input_type' => 'nullable|string',
             'is_multiselect' => 'boolean',
             'options' => 'nullable|array',
+            'default_option' => 'nullable|string',
             'use_in_table' => 'boolean',
             'validation_rules' => 'nullable|array',
             'sort' => 'nullable|integer|min:0',
+            'translations' => 'nullable|array',
+            'translations.*.locale' => 'required|string|max:10',
+            'translations.*.name' => 'required|string|max:255',
+            'translations.*.options' => 'nullable|array',
         ];
     }
 
@@ -118,6 +182,7 @@ class FieldForm extends Form
             'input_type' => $this->type === 'text' ? $this->input_type : null,
             'is_multiselect' => $this->is_multiselect,
             'options' => in_array($this->type, ['select', 'radio', 'checkbox_list']) ? $this->options : null,
+            'default_option' => in_array($this->type, ['select', 'radio']) ? $this->default_option : null,
             'use_in_table' => $this->use_in_table,
             'form_settings' => array_merge($this->form_settings, [
                 'validation_rules' => $this->validation_rules,
@@ -135,6 +200,7 @@ class FieldForm extends Form
             'input_type' => $this->type === 'text' ? $this->input_type : null,
             'is_multiselect' => $this->is_multiselect,
             'options' => in_array($this->type, ['select', 'radio', 'checkbox_list']) ? $this->options : null,
+            'default_option' => in_array($this->type, ['select', 'radio']) ? $this->default_option : null,
             'use_in_table' => $this->use_in_table,
             'form_settings' => [
                 'validation_rules' => $this->validation_rules,
@@ -183,5 +249,24 @@ class FieldForm extends Form
     public function getAllValidationRules(): array
     {
         return ValidationRule::allRules();
+    }
+
+    public function getAvailableLocales(): array
+    {
+        return config('app.locales', ['en']);
+    }
+
+    public function initializeTranslations(): void
+    {
+        $locales = $this->getAvailableLocales();
+        $this->translations = [];
+
+        foreach ($locales as $locale) {
+            $this->translations[] = [
+                'locale' => $locale,
+                'name' => '',
+                'options' => [],
+            ];
+        }
     }
 }

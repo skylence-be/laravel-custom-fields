@@ -71,4 +71,10 @@ return [
     'views' => [
         'layout' => 'components.layouts.app',
     ],
+
+    /**
+     * Enable default option selection for select/radio/checkbox fields.
+     * When true, fields can have a pre-selected default option.
+     */
+    'enable_default_options' => true,
 ];
