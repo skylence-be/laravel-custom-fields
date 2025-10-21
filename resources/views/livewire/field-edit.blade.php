@@ -23,9 +23,9 @@
                         Name <span class="text-red-500">*</span>
                     </label>
                     <input type="text"
-                           wire:model="name"
-                           class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 @error('name') border-red-500 @enderror">
-                    @error('name')
+                           wire:model.live.debounce.300ms="form.name"
+                           class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 @error('form.name') border-red-500 @enderror">
+                    @error('form.name')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
@@ -35,7 +35,7 @@
                         Code
                     </label>
                     <input type="text"
-                           value="{{ $code }}"
+                           value="{{ $form->code }}"
                            disabled
                            class="w-full px-4 py-2 border rounded-lg font-mono bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed">
                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Code cannot be changed after creation.</p>
@@ -43,18 +43,13 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Model Type <span class="text-red-500">*</span>
+                        Model Type
                     </label>
-                    <select wire:model="customizable_type"
-                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 @error('customizable_type') border-red-500 @enderror">
-                        <option value="">Select a model...</option>
-                        @foreach($customizableTypes as $class => $label)
-                            <option value="{{ $class }}">{{ $label }}</option>
-                        @endforeach
-                    </select>
-                    @error('customizable_type')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
+                    <input type="text"
+                           value="{{ $customizableTypes[$form->customizable_type] ?? $form->customizable_type }}"
+                           disabled
+                           class="w-full px-4 py-2 border rounded-lg bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed">
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Model type cannot be changed after creation.</p>
                 </div>
 
                 <div>
@@ -62,10 +57,10 @@
                         Sort Order
                     </label>
                     <input type="number"
-                           wire:model="sort"
+                           wire:model.live.debounce.300ms="form.sort"
                            min="0"
-                           class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 @error('sort') border-red-500 @enderror">
-                    @error('sort')
+                           class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 @error('form.sort') border-red-500 @enderror">
+                    @error('form.sort')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
@@ -78,25 +73,21 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Field Type <span class="text-red-500">*</span>
+                        Field Type
                     </label>
-                    <select wire:model.live="type"
-                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 @error('type') border-red-500 @enderror">
-                        @foreach($fieldTypes as $key => $label)
-                            <option value="{{ $key }}">{{ $label }}</option>
-                        @endforeach
-                    </select>
-                    @error('type')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
+                    <input type="text"
+                           value="{{ $field->type?->label() ?? $fieldTypes[$form->type] ?? $form->type }}"
+                           disabled
+                           class="w-full px-4 py-2 border rounded-lg bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed">
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Field type cannot be changed after creation.</p>
                 </div>
 
-                @if($type === 'text')
+                @if($form->type === 'text')
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Input Type
                         </label>
-                        <select wire:model="input_type"
+                        <select wire:model.live="form.input_type"
                                 class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600">
                             @foreach($textInputTypes as $key => $label)
                                 <option value="{{ $key }}">{{ $label }}</option>
@@ -105,14 +96,14 @@
                     </div>
                 @endif
 
-                @if($type === 'select')
+                @if($form->type === 'select')
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Allow Multiple Selection
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox"
-                                   wire:model="is_multiselect"
+                                   wire:model.live="form.is_multiselect"
                                    class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                             <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Enable multiselect</span>
                         </label>
@@ -120,7 +111,7 @@
                 @endif
             </div>
 
-            @if(in_array($type, ['select', 'radio', 'checkbox_list']))
+            @if(in_array($form->type, ['select', 'radio', 'checkbox_list']))
                 <div class="mt-6">
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Options <span class="text-red-500">*</span>
@@ -139,9 +130,9 @@
                         </button>
                     </div>
 
-                    @if(!empty($options))
+                    @if(!empty($form->options))
                         <div class="space-y-2">
-                            @foreach($options as $index => $option)
+                            @foreach($form->options as $index => $option)
                                 <div class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded">
                                     <span class="flex-1 text-sm text-gray-700 dark:text-gray-300">{{ $option }}</span>
                                     <button type="button"
@@ -154,7 +145,7 @@
                         </div>
                     @endif
 
-                    @error('options')
+                    @error('form.options')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
@@ -167,7 +158,7 @@
             <div>
                 <label class="flex items-center">
                     <input type="checkbox"
-                           wire:model="use_in_table"
+                           wire:model.live="form.use_in_table"
                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                     <span class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">Show in table columns</span>
                 </label>

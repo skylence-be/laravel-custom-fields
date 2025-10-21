@@ -3,114 +3,59 @@
 namespace Xve\LaravelCustomFields\Http\Livewire;
 
 use Livewire\Component;
+use Xve\LaravelCustomFields\Livewire\Forms\FieldForm;
 use Xve\LaravelCustomFields\Models\Field;
 use Xve\LaravelCustomFields\Services\FieldsColumnManager;
 
 class FieldCreate extends Component
 {
-    public string $name = '';
-
-    public string $code = '';
-
-    public string $type = 'text';
-
-    public string $input_type = 'text';
-
-    public bool $is_multiselect = false;
-
-    public array $options = [];
+    public FieldForm $form;
 
     public string $newOption = '';
 
-    public bool $use_in_table = false;
-
-    public string $customizable_type = '';
-
-    public int $sort = 0;
-
-    protected function rules(): array
-    {
-        return [
-            'name' => 'required|string|max:255',
-            'code' => [
-                'required',
-                'string',
-                'max:255',
-                'regex:/^[a-zA-Z_][a-zA-Z0-9_]*$/',
-                'unique:custom_fields,code,NULL,id,customizable_type,'.$this->customizable_type,
-            ],
-            'type' => 'required|in:'.implode(',', array_keys(Field::getFieldTypes())),
-            'input_type' => 'nullable|string',
-            'is_multiselect' => 'boolean',
-            'options' => 'nullable|array',
-            'use_in_table' => 'boolean',
-            'customizable_type' => 'required|string',
-            'sort' => 'nullable|integer|min:0',
-        ];
-    }
-
-    protected $messages = [
-        'code.regex' => 'Code must start with a letter or underscore and contain only letters, numbers, and underscores.',
-        'code.unique' => 'This code already exists for the selected model.',
-        'customizable_type.required' => 'Please select a model type.',
-    ];
-
     public function mount(): void
     {
-        $this->sort = Field::max('sort') + 1 ?? 0;
+        $this->form->sort = Field::max('sort') + 1 ?? 0;
     }
 
-    public function updatedCode(): void
+    public function updatedFormName(): void
     {
-        // Auto-generate code from name if empty
-        if (empty($this->code) && ! empty($this->name)) {
-            $this->code = strtolower(preg_replace('/[^a-zA-Z0-9_]/', '_', $this->name));
+        // Auto-generate code from name if code is empty
+        if (empty($this->form->code) && ! empty($this->form->name)) {
+            $this->form->code = strtolower(preg_replace('/[^a-zA-Z0-9_]/', '_', $this->form->name));
         }
     }
 
     public function addOption(): void
     {
         if (! empty($this->newOption)) {
-            $this->options[] = $this->newOption;
+            $this->form->addOption($this->newOption);
             $this->newOption = '';
         }
     }
 
     public function removeOption(int $index): void
     {
-        unset($this->options[$index]);
-        $this->options = array_values($this->options);
+        $this->form->removeOption($index);
     }
 
     public function save(): void
     {
-        $this->validate();
-
         // Check if code conflicts with existing database columns
-        if (! FieldsColumnManager::canCreateColumn($this->code, $this->customizable_type)) {
-            $this->addError('code', 'This code conflicts with an existing database column.');
+        if (! FieldsColumnManager::canCreateColumn($this->form->code, $this->form->customizable_type)) {
+            $this->addError('form.code', 'This code conflicts with an existing database column.');
 
             return;
         }
 
-        $field = Field::create([
-            'name' => $this->name,
-            'code' => $this->code,
-            'type' => $this->type,
-            'input_type' => $this->type === 'text' ? $this->input_type : null,
-            'is_multiselect' => $this->is_multiselect,
-            'options' => in_array($this->type, ['select', 'radio', 'checkbox_list']) ? $this->options : null,
-            'use_in_table' => $this->use_in_table,
-            'customizable_type' => $this->customizable_type,
-            'sort' => $this->sort,
-        ]);
+        $field = $this->form->store();
 
         // Create database column
         FieldsColumnManager::createColumn($field);
 
         session()->flash('message', 'Custom field created successfully.');
 
-        return $this->redirect(route(config('custom-fields.route.name_prefix').'index'));
+        $this->redirect(route(config('custom-fields.route.name_prefix').'index'));
     }
 
     public function render()

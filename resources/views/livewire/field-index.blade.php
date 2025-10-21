@@ -93,7 +93,7 @@
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">
                                 <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded">
-                                    {{ $fieldTypes[$field->type] ?? $field->type }}
+                                    {{ $field->type?->label() ?? $fieldTypes[$field->type] ?? $field->type }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">

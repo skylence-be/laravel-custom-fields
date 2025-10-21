@@ -4,6 +4,8 @@ namespace Xve\LaravelCustomFields\Services;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Xve\LaravelCustomFields\Enums\FieldType;
+use Xve\LaravelCustomFields\Enums\TextInputType;
 use Xve\LaravelCustomFields\Models\Field;
 
 class FieldsColumnManager
@@ -91,14 +93,14 @@ class FieldsColumnManager
     protected static function getColumnType(Field $field): string
     {
         return match ($field->type) {
-            'text' => static::getTextColumnType($field),
-            'textarea', 'editor', 'markdown' => 'text',
-            'radio' => 'string',
-            'select' => $field->is_multiselect ? 'json' : 'string',
-            'checkbox', 'toggle' => 'boolean',
-            'checkbox_list' => 'json',
-            'datetime' => 'datetime',
-            'color' => 'string',
+            FieldType::TEXT => static::getTextColumnType($field),
+            FieldType::TEXTAREA, FieldType::EDITOR, FieldType::MARKDOWN => 'text',
+            FieldType::RADIO => 'string',
+            FieldType::SELECT => $field->is_multiselect ? 'json' : 'string',
+            FieldType::CHECKBOX, FieldType::TOGGLE => 'boolean',
+            FieldType::CHECKBOX_LIST => 'json',
+            FieldType::DATETIME => 'datetime',
+            FieldType::COLOR => 'string',
             default => 'string'
         };
     }
@@ -109,8 +111,8 @@ class FieldsColumnManager
     protected static function getTextColumnType(Field $field): string
     {
         return match ($field->input_type) {
-            'integer' => 'integer',
-            'numeric' => 'decimal',
+            TextInputType::INTEGER => 'integer',
+            TextInputType::NUMERIC => 'decimal',
             default => 'string'
         };
     }

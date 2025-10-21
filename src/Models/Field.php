@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
+use Xve\LaravelCustomFields\Enums\FieldType;
+use Xve\LaravelCustomFields\Enums\TextInputType;
 
 class Field extends Model implements Sortable
 {
@@ -16,6 +18,8 @@ class Field extends Model implements Sortable
     protected function casts(): array
     {
         return [
+            'type' => FieldType::class,
+            'input_type' => TextInputType::class,
             'is_multiselect' => 'boolean',
             'options' => 'array',
             'form_settings' => 'array',
@@ -61,19 +65,7 @@ class Field extends Model implements Sortable
      */
     public static function getFieldTypes(): array
     {
-        return [
-            'text' => 'Text Input',
-            'textarea' => 'Textarea',
-            'select' => 'Select Dropdown',
-            'radio' => 'Radio Buttons',
-            'checkbox' => 'Checkbox',
-            'toggle' => 'Toggle',
-            'checkbox_list' => 'Checkbox List',
-            'datetime' => 'Date & Time',
-            'editor' => 'Rich Text Editor',
-            'markdown' => 'Markdown Editor',
-            'color' => 'Color Picker',
-        ];
+        return FieldType::options();
     }
 
     /**
@@ -81,14 +73,6 @@ class Field extends Model implements Sortable
      */
     public static function getTextInputTypes(): array
     {
-        return [
-            'text' => 'Text',
-            'email' => 'Email',
-            'numeric' => 'Numeric',
-            'integer' => 'Integer',
-            'password' => 'Password',
-            'tel' => 'Telephone',
-            'url' => 'URL',
-        ];
+        return TextInputType::options();
     }
 }
