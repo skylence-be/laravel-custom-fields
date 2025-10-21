@@ -1,17 +1,17 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "xve/laravel-custom-fields",
+    "description": "This is my package laravel-custom-fields",
     "keywords": [
-        ":vendor_name",
+        "xve",
         "laravel",
-        ":package_slug"
+        "laravel-custom-fields"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/xve/laravel-custom-fields",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Jonas Vanderhaegen",
+            "email": "jonas@xve.be",
             "role": "Developer"
         }
     ],
@@ -35,13 +35,13 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src/",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories/"
+            "Xve\\LaravelCustomFields\\": "src/",
+            "Xve\\LaravelCustomFields\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests/",
+            "Xve\\LaravelCustomFields\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
@@ -63,10 +63,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Xve\\LaravelCustomFields\\LaravelCustomFieldsServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "LaravelCustomFields": "Xve\\LaravelCustomFields\\Facades\\LaravelCustomFields"
             }
         }
     },
