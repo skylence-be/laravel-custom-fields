@@ -158,54 +158,51 @@
                 Add validation rules that will be applied when this field is used in forms.
             </p>
 
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Quick Add - Common Rules
-                </label>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
-                    @foreach($availableValidationRules as $value => $label)
-                        <button type="button"
-                                wire:click="addValidationRule('{{ $value }}')"
-                                class="px-3 py-2 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-600 text-left">
-                            {{ $label }}
-                        </button>
-                    @endforeach
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Select Rule
+                    </label>
+                    <select wire:model.live="selectedValidationRule"
+                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600">
+                        <option value="">Choose a validation rule...</option>
+                        <optgroup label="Simple Rules">
+                            @foreach($simpleValidationRules as $value => $label)
+                                <option value="{{ $value }}">{{ $label }}</option>
+                            @endforeach
+                        </optgroup>
+                        <optgroup label="Rules With Parameters">
+                            @foreach($parametrizedValidationRules as $value => $label)
+                                <option value="{{ $value }}">{{ $label }}</option>
+                            @endforeach
+                        </optgroup>
+                    </select>
                 </div>
+
+                @if(!empty($selectedValidationRule) && array_key_exists($selectedValidationRule, $parametrizedValidationRules))
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Parameter
+                            <span class="text-xs text-gray-500 dark:text-gray-400 font-normal">
+                                ({{ $parametrizedValidationRules[$selectedValidationRule] }})
+                            </span>
+                        </label>
+                        <input type="text"
+                               wire:model="validationRuleParameter"
+                               wire:keydown.enter.prevent="addValidationRule"
+                               placeholder="Enter parameter value..."
+                               class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600">
+                    </div>
+                @endif
             </div>
 
             <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Rules With Parameters
-                </label>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                    These rules require parameters. Enter the full rule with its parameters below.
-                </p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    @foreach($parametrizedValidationRules as $example => $description)
-                        <div class="text-xs text-gray-600 dark:text-gray-400 p-2 bg-gray-50 dark:bg-gray-700 rounded">
-                            <code class="font-mono text-blue-600 dark:text-blue-400">{{ $example }}</code>
-                            <span class="ml-2">- {{ $description }}</span>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Custom Rule or Rule With Parameters
-                </label>
-                <div class="flex gap-2">
-                    <input type="text"
-                           wire:model="newValidationRule"
-                           wire:keydown.enter.prevent="addValidationRule"
-                           placeholder="Enter a validation rule (e.g., min:5, max:100)..."
-                           class="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600">
-                    <button type="button"
-                            wire:click="addValidationRule"
-                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                        Add Rule
-                    </button>
-                </div>
+                <button type="button"
+                        wire:click="addValidationRule"
+                        :disabled="!selectedValidationRule"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                    Add Validation Rule
+                </button>
             </div>
 
             @if(!empty($form->validation_rules))
@@ -215,11 +212,16 @@
                     </label>
                     <div class="space-y-2">
                         @foreach($form->validation_rules as $index => $rule)
-                            <div class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded">
-                                <code class="flex-1 text-sm font-mono text-gray-700 dark:text-gray-300">{{ $rule }}</code>
+                            <div class="flex items-center gap-2 p-3 bg-gray-50 dark:bg-gray-700 rounded">
+                                <div class="flex-1">
+                                    <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                        {{ \Xve\LaravelCustomFields\Enums\ValidationRule::toHumanReadable($rule) }}
+                                    </span>
+                                    <code class="block text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ $rule }}</code>
+                                </div>
                                 <button type="button"
                                         wire:click="removeValidationRule({{ $index }})"
-                                        class="text-red-600 hover:text-red-800 text-sm">
+                                        class="text-red-600 hover:text-red-800 text-sm font-medium">
                                     Remove
                                 </button>
                             </div>

@@ -13,7 +13,9 @@ class FieldCreate extends Component
 
     public string $newOption = '';
 
-    public string $newValidationRule = '';
+    public string $selectedValidationRule = '';
+
+    public string $validationRuleParameter = '';
 
     public function mount(): void
     {
@@ -43,10 +45,22 @@ class FieldCreate extends Component
 
     public function addValidationRule(): void
     {
-        if (! empty($this->newValidationRule)) {
-            $this->form->addValidationRule($this->newValidationRule);
-            $this->newValidationRule = '';
+        if (empty($this->selectedValidationRule)) {
+            return;
         }
+
+        $rule = $this->selectedValidationRule;
+
+        // If rule requires parameter and parameter is provided
+        if (! empty($this->validationRuleParameter)) {
+            $rule .= ':'.$this->validationRuleParameter;
+        }
+
+        $this->form->addValidationRule($rule);
+
+        // Reset
+        $this->selectedValidationRule = '';
+        $this->validationRuleParameter = '';
     }
 
     public function removeValidationRule(int $index): void
@@ -89,7 +103,7 @@ class FieldCreate extends Component
             'fieldTypes' => Field::getFieldTypes(),
             'textInputTypes' => Field::getTextInputTypes(),
             'customizableTypes' => $customizableTypes,
-            'availableValidationRules' => $this->form->getAvailableValidationRules(),
+            'simpleValidationRules' => $this->form->getAvailableValidationRules(),
             'parametrizedValidationRules' => $this->form->getParametrizedValidationRules(),
         ]);
     }

@@ -179,4 +179,9 @@ class FieldForm extends Form
     {
         return ValidationRule::parametrizedRules();
     }
+
+    public function getAllValidationRules(): array
+    {
+        return ValidationRule::allRules();
+    }
 }
