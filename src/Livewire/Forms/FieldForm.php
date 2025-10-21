@@ -5,6 +5,7 @@ namespace Xve\LaravelCustomFields\Livewire\Forms;
 use Illuminate\Validation\Rule;
 use Livewire\Form;
 use Xve\LaravelCustomFields\Enums\FieldType;
+use Xve\LaravelCustomFields\Enums\ValidationRule;
 use Xve\LaravelCustomFields\Models\Field;
 
 class FieldForm extends Form
@@ -24,6 +25,8 @@ class FieldForm extends Form
     public array $options = [];
 
     public bool $use_in_table = false;
+
+    public array $validation_rules = [];
 
     public string $customizable_type = '';
 
@@ -47,6 +50,7 @@ class FieldForm extends Form
             'is_multiselect' => 'boolean',
             'options' => 'nullable|array',
             'use_in_table' => 'boolean',
+            'validation_rules' => 'nullable|array',
             'customizable_type' => 'required|string',
             'sort' => 'nullable|integer|min:0',
         ];
@@ -72,6 +76,7 @@ class FieldForm extends Form
         $this->is_multiselect = $field->is_multiselect;
         $this->options = $field->options ?? [];
         $this->use_in_table = $field->use_in_table;
+        $this->validation_rules = $field->validation_rules ?? [];
         $this->customizable_type = $field->customizable_type;
         $this->sort = $field->sort;
     }
@@ -98,6 +103,7 @@ class FieldForm extends Form
             'is_multiselect' => 'boolean',
             'options' => 'nullable|array',
             'use_in_table' => 'boolean',
+            'validation_rules' => 'nullable|array',
             'sort' => 'nullable|integer|min:0',
         ];
     }
@@ -110,6 +116,7 @@ class FieldForm extends Form
             'is_multiselect' => $this->is_multiselect,
             'options' => in_array($this->type, ['select', 'radio', 'checkbox_list']) ? $this->options : null,
             'use_in_table' => $this->use_in_table,
+            'validation_rules' => $this->validation_rules,
             'sort' => $this->sort,
         ];
     }
@@ -124,6 +131,7 @@ class FieldForm extends Form
             'is_multiselect' => $this->is_multiselect,
             'options' => in_array($this->type, ['select', 'radio', 'checkbox_list']) ? $this->options : null,
             'use_in_table' => $this->use_in_table,
+            'validation_rules' => $this->validation_rules,
             'customizable_type' => $this->customizable_type,
             'sort' => $this->sort,
         ];
@@ -140,5 +148,28 @@ class FieldForm extends Form
     {
         unset($this->options[$index]);
         $this->options = array_values($this->options);
+    }
+
+    public function addValidationRule(string $rule): void
+    {
+        if (! empty($rule) && ! in_array($rule, $this->validation_rules)) {
+            $this->validation_rules[] = $rule;
+        }
+    }
+
+    public function removeValidationRule(int $index): void
+    {
+        unset($this->validation_rules[$index]);
+        $this->validation_rules = array_values($this->validation_rules);
+    }
+
+    public function getAvailableValidationRules(): array
+    {
+        return ValidationRule::options();
+    }
+
+    public function getParametrizedValidationRules(): array
+    {
+        return ValidationRule::parametrizedRules();
     }
 }

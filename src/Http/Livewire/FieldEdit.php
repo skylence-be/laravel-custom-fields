@@ -15,6 +15,8 @@ class FieldEdit extends Component
 
     public string $newOption = '';
 
+    public string $newValidationRule = '';
+
     public bool $showDeleteModal = false;
 
     public bool $forceDelete = false;
@@ -36,6 +38,19 @@ class FieldEdit extends Component
     public function removeOption(int $index): void
     {
         $this->form->removeOption($index);
+    }
+
+    public function addValidationRule(): void
+    {
+        if (! empty($this->newValidationRule)) {
+            $this->form->addValidationRule($this->newValidationRule);
+            $this->newValidationRule = '';
+        }
+    }
+
+    public function removeValidationRule(int $index): void
+    {
+        $this->form->removeValidationRule($index);
     }
 
     public function save(): void
@@ -87,6 +102,8 @@ class FieldEdit extends Component
             'fieldTypes' => Field::getFieldTypes(),
             'textInputTypes' => Field::getTextInputTypes(),
             'customizableTypes' => $customizableTypes,
+            'availableValidationRules' => $this->form->getAvailableValidationRules(),
+            'parametrizedValidationRules' => $this->form->getParametrizedValidationRules(),
         ]);
     }
 }

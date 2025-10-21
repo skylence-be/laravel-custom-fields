@@ -13,6 +13,8 @@ class FieldCreate extends Component
 
     public string $newOption = '';
 
+    public string $newValidationRule = '';
+
     public function mount(): void
     {
         $this->form->sort = Field::max('sort') + 1 ?? 0;
@@ -37,6 +39,19 @@ class FieldCreate extends Component
     public function removeOption(int $index): void
     {
         $this->form->removeOption($index);
+    }
+
+    public function addValidationRule(): void
+    {
+        if (! empty($this->newValidationRule)) {
+            $this->form->addValidationRule($this->newValidationRule);
+            $this->newValidationRule = '';
+        }
+    }
+
+    public function removeValidationRule(int $index): void
+    {
+        $this->form->removeValidationRule($index);
     }
 
     public function save(): void
@@ -74,6 +89,8 @@ class FieldCreate extends Component
             'fieldTypes' => Field::getFieldTypes(),
             'textInputTypes' => Field::getTextInputTypes(),
             'customizableTypes' => $customizableTypes,
+            'availableValidationRules' => $this->form->getAvailableValidationRules(),
+            'parametrizedValidationRules' => $this->form->getParametrizedValidationRules(),
         ]);
     }
 }

@@ -160,6 +160,87 @@
         </div>
 
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Validation Rules</h2>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                Add validation rules that will be applied when this field is used in forms.
+            </p>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Quick Add - Common Rules
+                </label>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                    @foreach($availableValidationRules as $value => $label)
+                        <button type="button"
+                                wire:click="addValidationRule('{{ $value }}')"
+                                class="px-3 py-2 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-600 text-left">
+                            {{ $label }}
+                        </button>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Rules With Parameters
+                </label>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                    These rules require parameters. Enter the full rule with its parameters below.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    @foreach($parametrizedValidationRules as $example => $description)
+                        <div class="text-xs text-gray-600 dark:text-gray-400 p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                            <code class="font-mono text-blue-600 dark:text-blue-400">{{ $example }}</code>
+                            <span class="ml-2">- {{ $description }}</span>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Custom Rule or Rule With Parameters
+                </label>
+                <div class="flex gap-2">
+                    <input type="text"
+                           wire:model="newValidationRule"
+                           wire:keydown.enter.prevent="addValidationRule"
+                           placeholder="Enter a validation rule (e.g., min:5, max:100)..."
+                           class="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600">
+                    <button type="button"
+                            wire:click="addValidationRule"
+                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                        Add Rule
+                    </button>
+                </div>
+            </div>
+
+            @if(!empty($form->validation_rules))
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Active Validation Rules
+                    </label>
+                    <div class="space-y-2">
+                        @foreach($form->validation_rules as $index => $rule)
+                            <div class="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                                <code class="flex-1 text-sm font-mono text-gray-700 dark:text-gray-300">{{ $rule }}</code>
+                                <button type="button"
+                                        wire:click="removeValidationRule({{ $index }})"
+                                        class="text-red-600 hover:text-red-800 text-sm">
+                                    Remove
+                                </button>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+            @error('form.validation_rules')
+                <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
             <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Display Settings</h2>
 
             <div>
