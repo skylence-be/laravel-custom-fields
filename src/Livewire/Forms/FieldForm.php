@@ -26,6 +26,8 @@ class FieldForm extends Form
 
     public ?string $default_option = null;
 
+    public int $nextOptionId = 1;
+
     public bool $use_in_table = false;
 
     public array $validation_rules = [];
@@ -85,7 +87,11 @@ class FieldForm extends Form
         $this->type = $field->type?->value ?? 'text';
         $this->input_type = $field->input_type?->value ?? 'text';
         $this->is_multiselect = $field->is_multiselect;
-        $this->options = $field->options ?? [];
+
+        // Convert old array-based options to key-based structure
+        $this->options = $this->convertOptionsToKeyBased($field->options ?? []);
+        $this->nextOptionId = $this->getNextOptionId();
+
         $this->default_option = $field->default_option;
         $this->use_in_table = $field->use_in_table;
         $this->form_settings = $field->form_settings ?? [];
@@ -102,7 +108,7 @@ class FieldForm extends Form
                 $this->translations[] = [
                     'locale' => $locale,
                     'name' => $existingTranslations[$locale]->name,
-                    'options' => $existingTranslations[$locale]->options ?? [],
+                    'options' => $this->convertOptionsToKeyBased($existingTranslations[$locale]->options ?? []),
                 ];
             } else {
                 $this->translations[] = [
@@ -151,7 +157,7 @@ class FieldForm extends Form
                 $field->setTranslation(
                     $translation['locale'],
                     $translation['name'] ?? '',
-                    $translation['options'] ?? null
+                    $hasOptions ? $translation['options'] : null
                 );
             }
         }
@@ -213,14 +219,51 @@ class FieldForm extends Form
     public function addOption(string $newOption): void
     {
         if (! empty($newOption)) {
-            $this->options[] = $newOption;
+            $id = $this->nextOptionId++;
+            $this->options[$id] = $newOption;
         }
     }
 
-    public function removeOption(int $index): void
+    public function removeOption(int $id): void
     {
-        unset($this->options[$index]);
-        $this->options = array_values($this->options);
+        unset($this->options[$id]);
+
+        // Also remove from all translations
+        foreach ($this->translations as $index => $translation) {
+            if (isset($this->translations[$index]['options'][$id])) {
+                unset($this->translations[$index]['options'][$id]);
+            }
+        }
+    }
+
+    public function moveOption(int $id, string $direction): void
+    {
+        $keys = array_keys($this->options);
+        $currentIndex = array_search($id, $keys);
+
+        if ($currentIndex === false) {
+            return;
+        }
+
+        if ($direction === 'up' && $currentIndex > 0) {
+            $swapIndex = $currentIndex - 1;
+        } elseif ($direction === 'down' && $currentIndex < count($keys) - 1) {
+            $swapIndex = $currentIndex + 1;
+        } else {
+            return;
+        }
+
+        // Swap the keys
+        $temp = $keys[$currentIndex];
+        $keys[$currentIndex] = $keys[$swapIndex];
+        $keys[$swapIndex] = $temp;
+
+        // Rebuild options array with new order
+        $newOptions = [];
+        foreach ($keys as $key) {
+            $newOptions[$key] = $this->options[$key];
+        }
+        $this->options = $newOptions;
     }
 
     public function addValidationRule(string $rule): void
@@ -268,5 +311,40 @@ class FieldForm extends Form
                 'options' => [],
             ];
         }
+    }
+
+    protected function convertOptionsToKeyBased(array $options): array
+    {
+        // If already key-based, return as is
+        if (empty($options)) {
+            return [];
+        }
+
+        // Check if this is an old sequential array [0 => 'value1', 1 => 'value2']
+        $keys = array_keys($options);
+        $isSequential = $keys === range(0, count($options) - 1);
+
+        if (! $isSequential) {
+            // Already has proper keys, return as is
+            return $options;
+        }
+
+        // Convert old sequential array to key-based using index + 1 as ID
+        // This ensures backward compatibility while giving us stable IDs
+        $keyBased = [];
+        foreach ($options as $index => $value) {
+            $keyBased[$index + 1] = $value;
+        }
+
+        return $keyBased;
+    }
+
+    protected function getNextOptionId(): int
+    {
+        if (empty($this->options)) {
+            return 1;
+        }
+
+        return max(array_keys($this->options)) + 1;
     }
 }

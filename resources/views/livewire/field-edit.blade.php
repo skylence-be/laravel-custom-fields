@@ -133,12 +133,11 @@
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Input Type
                         </label>
-                        <select wire:model.live="form.input_type"
-                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600">
-                            @foreach($textInputTypes as $key => $label)
-                                <option value="{{ $key }}">{{ $label }}</option>
-                            @endforeach
-                        </select>
+                        <input type="text"
+                               value="{{ $field->input_type?->label() ?? $textInputTypes[$form->input_type] ?? $form->input_type }}"
+                               disabled
+                               class="w-full px-4 py-2 border rounded-lg bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Input type cannot be changed after creation.</p>
                     </div>
                 @endif
 
@@ -178,19 +177,33 @@
 
                     @if(!empty($form->options))
                         <div class="space-y-3">
-                            @foreach($form->options as $optionIndex => $option)
+                            @foreach($form->options as $optionId => $option)
                                 <div class="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
                                     <div class="flex items-center gap-2 mb-2">
+                                        <div class="flex flex-col gap-1">
+                                            <button type="button"
+                                                    wire:click="moveOption({{ $optionId }}, 'up')"
+                                                    class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-xs"
+                                                    title="Move up">
+                                                ▲
+                                            </button>
+                                            <button type="button"
+                                                    wire:click="moveOption({{ $optionId }}, 'down')"
+                                                    class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-xs"
+                                                    title="Move down">
+                                                ▼
+                                            </button>
+                                        </div>
                                         <span class="flex-1 text-sm font-medium text-gray-900 dark:text-gray-100">{{ $option }}</span>
                                         @if(count($availableLocales) > 0)
                                             <button type="button"
-                                                    wire:click="copyOptionToTranslations({{ $optionIndex }})"
+                                                    wire:click="copyOptionToTranslations({{ $optionId }})"
                                                     class="px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 text-xs whitespace-nowrap">
                                                 Copy to Translations
                                             </button>
                                         @endif
                                         <button type="button"
-                                                wire:click="removeOption({{ $optionIndex }})"
+                                                wire:click="removeOption({{ $optionId }})"
                                                 class="text-red-600 hover:text-red-800 text-sm">
                                             Remove
                                         </button>
@@ -213,7 +226,7 @@
                                                         {{ $languageNames[$translation['locale']] ?? strtoupper($translation['locale']) }}
                                                     </label>
                                                     <input type="text"
-                                                           wire:model.live.debounce.300ms="form.translations.{{ $translationIndex }}.options.{{ $optionIndex }}"
+                                                           wire:model.live.debounce.300ms="form.translations.{{ $translationIndex }}.options.{{ $optionId }}"
                                                            placeholder="Translation..."
                                                            class="w-full px-2 py-1 text-sm border rounded focus:ring-1 focus:ring-blue-500 dark:bg-gray-600 dark:text-white dark:border-gray-500">
                                                 </div>

@@ -119,6 +119,33 @@ class Field extends Model implements Sortable
     }
 
     /**
+     * Get option values as a simple array (for select/radio display).
+     * Maintains order but strips the keys.
+     */
+    public function getOptionValues(): array
+    {
+        if (empty($this->options)) {
+            return [];
+        }
+
+        return array_values($this->options);
+    }
+
+    /**
+     * Get translated option values as a simple array.
+     */
+    public function getTranslatedOptionValues(?string $locale = null): array
+    {
+        $options = $this->getTranslatedOptions($locale);
+
+        if (empty($options)) {
+            return [];
+        }
+
+        return array_values($options);
+    }
+
+    /**
      * Set or update translation for a specific locale.
      */
     public function setTranslation(string $locale, string $name, ?array $options = null): FieldTranslation

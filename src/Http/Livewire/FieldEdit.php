@@ -37,9 +37,14 @@ class FieldEdit extends Component
         }
     }
 
-    public function removeOption(int $index): void
+    public function removeOption(int $id): void
     {
-        $this->form->removeOption($index);
+        $this->form->removeOption($id);
+    }
+
+    public function moveOption(int $id, string $direction): void
+    {
+        $this->form->moveOption($id, $direction);
     }
 
     public function addValidationRule(): void
@@ -78,16 +83,16 @@ class FieldEdit extends Component
         }
     }
 
-    public function copyOptionToTranslations(int $optionIndex): void
+    public function copyOptionToTranslations(int $optionId): void
     {
-        if (! isset($this->form->options[$optionIndex])) {
+        if (! isset($this->form->options[$optionId])) {
             return;
         }
 
-        $optionValue = $this->form->options[$optionIndex];
+        $optionValue = $this->form->options[$optionId];
 
         foreach ($this->form->translations as $index => $translation) {
-            $this->form->translations[$index]['options'][$optionIndex] = $optionValue;
+            $this->form->translations[$index]['options'][$optionId] = $optionValue;
         }
     }
 
