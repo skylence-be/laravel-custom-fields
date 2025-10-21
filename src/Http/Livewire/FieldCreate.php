@@ -3,7 +3,6 @@
 namespace Xve\LaravelCustomFields\Http\Livewire;
 
 use Livewire\Component;
-use Illuminate\Support\Facades\Schema;
 use Xve\LaravelCustomFields\Models\Field;
 use Xve\LaravelCustomFields\Services\FieldsColumnManager;
 
