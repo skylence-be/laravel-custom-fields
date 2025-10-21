@@ -28,6 +28,8 @@ class FieldForm extends Form
 
     public array $validation_rules = [];
 
+    public array $form_settings = [];
+
     public string $customizable_type = '';
 
     public int $sort = 0;
@@ -76,7 +78,8 @@ class FieldForm extends Form
         $this->is_multiselect = $field->is_multiselect;
         $this->options = $field->options ?? [];
         $this->use_in_table = $field->use_in_table;
-        $this->validation_rules = $field->validation_rules ?? [];
+        $this->form_settings = $field->form_settings ?? [];
+        $this->validation_rules = $field->form_settings['validation_rules'] ?? [];
         $this->customizable_type = $field->customizable_type;
         $this->sort = $field->sort;
     }
@@ -116,7 +119,9 @@ class FieldForm extends Form
             'is_multiselect' => $this->is_multiselect,
             'options' => in_array($this->type, ['select', 'radio', 'checkbox_list']) ? $this->options : null,
             'use_in_table' => $this->use_in_table,
-            'validation_rules' => $this->validation_rules,
+            'form_settings' => array_merge($this->form_settings, [
+                'validation_rules' => $this->validation_rules,
+            ]),
             'sort' => $this->sort,
         ];
     }
@@ -131,7 +136,9 @@ class FieldForm extends Form
             'is_multiselect' => $this->is_multiselect,
             'options' => in_array($this->type, ['select', 'radio', 'checkbox_list']) ? $this->options : null,
             'use_in_table' => $this->use_in_table,
-            'validation_rules' => $this->validation_rules,
+            'form_settings' => [
+                'validation_rules' => $this->validation_rules,
+            ],
             'customizable_type' => $this->customizable_type,
             'sort' => $this->sort,
         ];
