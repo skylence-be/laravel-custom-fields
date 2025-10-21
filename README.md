@@ -1,19 +1,22 @@
-# This is my package laravel-custom-fields
+# Laravel Custom Fields
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/xve/laravel-custom-fields.svg?style=flat-square)](https://packagist.org/packages/xve/laravel-custom-fields)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/xve/laravel-custom-fields/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/xve/laravel-custom-fields/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/xve/laravel-custom-fields/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/xve/laravel-custom-fields/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/xve/laravel-custom-fields.svg?style=flat-square)](https://packagist.org/packages/xve/laravel-custom-fields)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+A powerful Laravel package that allows you to dynamically add custom fields to any Eloquent model without modifying your database schema or codebase. Built with Livewire 3 for a modern, reactive admin interface.
 
-## Support us
+## Features
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-custom-fields.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-custom-fields)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+- ✅ **11 Field Types**: Text, Textarea, Select, Radio, Checkbox, Toggle, Checkbox List, DateTime, Rich Editor, Markdown, Color Picker
+- ✅ **Column-Based Storage**: Custom fields are stored as actual database columns for optimal performance
+- ✅ **Livewire 3 UI**: Modern, reactive admin interface for managing custom fields
+- ✅ **Simple Integration**: Just add a trait to your models
+- ✅ **Automatic Column Management**: Database columns are created/deleted automatically
+- ✅ **Soft Deletes**: Safe deletion with optional permanent removal
+- ✅ **Searchable & Filterable**: Built-in search and filtering in the admin interface
+- ✅ **Sortable Fields**: Control the display order of your custom fields
+- ✅ **Validation Support**: Full Laravel validation rule support
+- ✅ **Multi-Model Support**: Add custom fields to multiple models
 
 ## Installation
 
@@ -23,37 +26,181 @@ You can install the package via composer:
 composer require xve/laravel-custom-fields
 ```
 
-You can publish and run the migrations with:
+Publish the config file and migrations:
 
 ```bash
-php artisan vendor:publish --tag="laravel-custom-fields-migrations"
+php artisan vendor:publish --tag="custom-fields-config"
+php artisan vendor:publish --tag="custom-fields-migrations"
+```
+
+Run the migrations:
+
+```bash
 php artisan migrate
 ```
 
-You can publish the config file with:
+Optionally, publish the views for customization:
 
 ```bash
-php artisan vendor:publish --tag="laravel-custom-fields-config"
+php artisan vendor:publish --tag="custom-fields-views"
 ```
 
-This is the contents of the published config file:
+## Configuration
+
+The configuration file is located at `config/custom-fields.php`:
 
 ```php
 return [
+    // Route configuration
+    'route' => [
+        'prefix' => 'admin/fields',
+        'middleware' => ['web', 'auth'],
+        'name_prefix' => 'custom-fields.',
+    ],
+
+    // Models that can have custom fields
+    'customizable_types' => [
+        App\Models\User::class => 'Users',
+        App\Models\Post::class => 'Posts',
+        // Add your models here...
+    ],
+
+    // Pagination
+    'per_page' => 15,
+
+    // Enable soft deletes
+    'enable_soft_deletes' => true,
 ];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="laravel-custom-fields-views"
 ```
 
 ## Usage
 
+### Step 1: Add Trait to Your Model
+
+Add the `HasCustomFields` trait to any model you want to support custom fields:
+
 ```php
-$laravelCustomFields = new Xve\LaravelCustomFields();
-echo $laravelCustomFields->echoPhrase('Hello, Xve!');
+use Illuminate\Database\Eloquent\Model;
+use Xve\LaravelCustomFields\Traits\HasCustomFields;
+
+class Employee extends Model
+{
+    use HasCustomFields;
+
+    protected $fillable = [
+        'name',
+        'email',
+        // Custom field codes will be automatically merged
+    ];
+}
+```
+
+### Step 2: Create Custom Fields via Admin Interface
+
+Navigate to `/admin/fields` in your browser to access the custom fields management interface.
+
+**Create a new field:**
+1. Click "Create New Field"
+2. Fill in the details:
+   - **Name**: Display label (e.g., "Employee Rating")
+   - **Code**: Database column name (e.g., "employee_rating")
+   - **Type**: Select from 11 field types
+   - **Model Type**: Select which model this field belongs to
+   - **Options**: Add options for select/radio/checkbox list types
+   - **Display Settings**: Toggle "Show in table columns"
+
+3. Click "Create Field"
+
+The package will automatically:
+- Create a database column on the model's table
+- Make the field available in your model
+- Add appropriate casts and fillable attributes
+
+### Step 3: Use Custom Fields in Your Code
+
+Once created, custom fields work like regular model attributes:
+
+```php
+// Create a new record with custom fields
+$employee = Employee::create([
+    'name' => 'John Doe',
+    'email' => 'john@example.com',
+    'employee_rating' => 'Excellent', // Custom field
+    'department_code' => 'IT',         // Custom field
+]);
+
+// Update custom fields
+$employee->employee_rating = 'Good';
+$employee->save();
+
+// Access custom field values
+echo $employee->employee_rating; // 'Good'
+
+// Use helper methods
+$rating = $employee->getCustomField('employee_rating');
+$employee->setCustomField('employee_rating', 'Excellent');
+
+// Get all custom field values
+$customValues = $employee->getCustomFieldValues();
+```
+
+### Step 4: Query with Custom Fields
+
+Custom fields are stored as actual database columns, so you can use them in queries:
+
+```php
+// Where clauses
+$employees = Employee::where('employee_rating', 'Excellent')->get();
+
+// Order by
+$employees = Employee::orderBy('department_code')->get();
+
+// Select specific fields
+$employees = Employee::select('name', 'employee_rating')->get();
+```
+
+## Field Types
+
+The package supports 11 different field types:
+
+- **Text Input**: Basic text with subtypes (email, numeric, integer, password, tel, url)
+- **Textarea**: Multi-line text
+- **Select Dropdown**: Single or multi-select with custom options
+- **Radio Buttons**: Mutually exclusive options
+- **Checkbox**: Single boolean checkbox
+- **Toggle**: Toggle switch (boolean)
+- **Checkbox List**: Multiple checkboxes (array)
+- **Date & Time**: DateTime picker
+- **Rich Text Editor**: WYSIWYG editor
+- **Markdown Editor**: Markdown with preview
+- **Color Picker**: Color selection
+
+## Admin Interface Routes
+
+The package provides three main routes:
+
+- **Index**: `/admin/fields` - List all custom fields
+- **Create**: `/admin/fields/create` - Create a new custom field
+- **Edit**: `/admin/fields/{field}/edit` - Edit an existing custom field
+
+All routes are protected by the middleware specified in the config file (default: `['web', 'auth']`).
+
+## Programmatic Field Creation
+
+You can also create fields programmatically:
+
+```php
+use Xve\LaravelCustomFields\Models\Field;
+
+Field::create([
+    'name' => 'Employee Rating',
+    'code' => 'employee_rating',
+    'type' => 'select',
+    'options' => ['Excellent', 'Good', 'Average', 'Poor'],
+    'customizable_type' => App\Models\Employee::class,
+    'use_in_table' => true,
+    'sort' => 10,
+]);
 ```
 
 ## Testing
