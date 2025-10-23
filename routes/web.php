@@ -13,4 +13,3 @@ Route::prefix(config('custom-fields.route.prefix'))
         Route::get('/create', FieldCreate::class)->name('create');
         Route::get('/{field}/edit', FieldEdit::class)->name('edit');
     });
-
