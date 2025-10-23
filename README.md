@@ -26,20 +26,25 @@ You can install the package via composer:
 composer require xve/laravel-custom-fields
 ```
 
-Publish the config file and migrations:
-
-```bash
-php artisan vendor:publish --tag="custom-fields-config"
-php artisan vendor:publish --tag="custom-fields-migrations"
-```
-
 Run the migrations:
 
 ```bash
 php artisan migrate
 ```
 
-Optionally, publish the views for customization:
+**That's it!** The package works out of the box with sensible defaults.
+
+### Optional: Publish Configuration
+
+You only need to publish the config if you want to customize routes, middleware, or other settings:
+
+```bash
+php artisan vendor:publish --tag="custom-fields-config"
+```
+
+### Optional: Publish Views
+
+You only need to publish views if you want to customize the admin interface:
 
 ```bash
 php artisan vendor:publish --tag="custom-fields-views"
@@ -47,29 +52,34 @@ php artisan vendor:publish --tag="custom-fields-views"
 
 ## Configuration
 
-The configuration file is located at `config/custom-fields.php`:
+The package works with sensible defaults. If you've published the config file, it's located at `config/custom-fields.php`:
 
 ```php
 return [
-    // Route configuration
+    // Route configuration (default: /admin/fields with web & auth middleware)
     'route' => [
         'prefix' => 'admin/fields',
         'middleware' => ['web', 'auth'],
         'name_prefix' => 'custom-fields.',
     ],
 
-    // Models that can have custom fields
+    // Database table name (default: custom_fields)
+    'table_name' => 'custom_fields',
+
+    // Models that can have custom fields (optional - for UI dropdown)
     'customizable_types' => [
-        App\Models\User::class => 'Users',
-        App\Models\Post::class => 'Posts',
-        // Add your models here...
+        // Example: App\Models\User::class => 'Users',
+        // Example: App\Models\Post::class => 'Posts',
     ],
 
-    // Pagination
+    // Pagination (default: 15)
     'per_page' => 15,
 
-    // Enable soft deletes
+    // Enable soft deletes (default: true)
     'enable_soft_deletes' => true,
+
+    // Enable default option selection (default: true)
+    'enable_default_options' => true,
 ];
 ```
 
