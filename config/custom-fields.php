@@ -18,36 +18,6 @@ return [
     'table_name' => 'custom_fields',
 
     /**
-     * Available field types.
-     */
-    'field_types' => [
-        'text' => 'Text Input',
-        'textarea' => 'Textarea',
-        'select' => 'Select Dropdown',
-        'radio' => 'Radio Buttons',
-        'checkbox' => 'Checkbox',
-        'toggle' => 'Toggle',
-        'checkbox_list' => 'Checkbox List',
-        'datetime' => 'Date & Time',
-        'editor' => 'Rich Text Editor',
-        'markdown' => 'Markdown Editor',
-        'color' => 'Color Picker',
-    ],
-
-    /**
-     * Input types for text fields.
-     */
-    'text_input_types' => [
-        'text' => 'Text',
-        'email' => 'Email',
-        'numeric' => 'Numeric',
-        'integer' => 'Integer',
-        'password' => 'Password',
-        'tel' => 'Telephone',
-        'url' => 'URL',
-    ],
-
-    /**
      * Models that can have custom fields.
      * Add your models here.
      */
