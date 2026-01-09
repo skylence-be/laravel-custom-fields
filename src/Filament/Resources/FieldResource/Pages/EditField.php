@@ -25,8 +25,15 @@ class EditField extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            $this->getSaveFormAction()->formId('form'),
+            $this->getCancelFormAction(),
             DeleteAction::make(),
         ];
+    }
+
+    protected function getFormActions(): array
+    {
+        return [];
     }
 
     protected function afterSave(): void
