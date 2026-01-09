@@ -25,7 +25,7 @@ class FieldEdit extends Component
 
     public function mount(Field $field): void
     {
-        $this->field = $field;
+        $this->field = $field->load(['creator', 'updater']);
         $this->form->setField($field);
     }
 

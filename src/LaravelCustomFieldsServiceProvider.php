@@ -6,11 +6,12 @@ use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Xve\LaravelCustomFields\Commands\LaravelCustomFieldsCommand;
+use Xve\LaravelCustomFields\Http\Livewire\FieldActivityLog;
 use Xve\LaravelCustomFields\Http\Livewire\FieldCreate;
 use Xve\LaravelCustomFields\Http\Livewire\FieldEdit;
 use Xve\LaravelCustomFields\Http\Livewire\FieldIndex;
 use Xve\LaravelCustomFields\Models\Field;
-use Xve\LaravelCustomFields\Services\FieldsColumnManager;
+use Xve\LaravelCustomFields\Observers\FieldObserver;
 
 class LaravelCustomFieldsServiceProvider extends PackageServiceProvider
 {
@@ -29,6 +30,8 @@ class LaravelCustomFieldsServiceProvider extends PackageServiceProvider
                 'create_custom_fields_table',
                 'create_custom_field_translations_table',
                 'add_default_option_to_custom_fields_table',
+                'add_user_tracking_to_custom_fields_table',
+                'create_custom_field_activity_log_table',
             ])
             ->hasRoute('web')
             ->hasCommand(LaravelCustomFieldsCommand::class);
@@ -40,19 +43,9 @@ class LaravelCustomFieldsServiceProvider extends PackageServiceProvider
         Livewire::component('custom-fields.index', FieldIndex::class);
         Livewire::component('custom-fields.create', FieldCreate::class);
         Livewire::component('custom-fields.edit', FieldEdit::class);
+        Livewire::component('custom-fields.activity-log', FieldActivityLog::class);
 
         // Register model observers
-        Field::observe(new class
-        {
-            public function created(Field $field): void
-            {
-                FieldsColumnManager::createColumn($field);
-            }
-
-            public function forceDeleted(Field $field): void
-            {
-                FieldsColumnManager::deleteColumn($field);
-            }
-        });
+        Field::observe(FieldObserver::class);
     }
 }
