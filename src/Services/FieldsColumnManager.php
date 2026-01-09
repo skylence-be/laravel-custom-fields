@@ -128,6 +128,22 @@ class FieldsColumnManager
     }
 
     /**
+     * Ensure column exists for the field, creating it if needed.
+     */
+    public static function ensureColumnExists(Field $field): void
+    {
+        $table = static::getTableName($field);
+
+        if (! Schema::hasTable($table)) {
+            return;
+        }
+
+        if (! Schema::hasColumn($table, $field->code)) {
+            static::createColumn($field);
+        }
+    }
+
+    /**
      * Check if a column can be safely created (doesn't conflict with existing columns).
      */
     public static function canCreateColumn(string $code, string $customizableType): bool

@@ -47,6 +47,19 @@ class FieldsTable
                     ->label('Resource')
                     ->formatStateUsing(fn (string $state): string => str($state)->afterLast('\\')->toString())
                     ->sortable(),
+                IconColumn::make('is_system')
+                    ->label('System')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-lock-closed')
+                    ->falseIcon('heroicon-o-lock-open')
+                    ->trueColor('warning')
+                    ->falseColor('gray'),
+                IconColumn::make('is_required')
+                    ->label('Required')
+                    ->boolean(),
+                IconColumn::make('show_in_api')
+                    ->label('API')
+                    ->boolean(),
                 IconColumn::make('use_in_table')
                     ->label('In Table')
                     ->boolean(),
@@ -80,6 +93,7 @@ class FieldsTable
                                 ->body('The custom field has been restored.')
                         ),
                     DeleteAction::make()
+                        ->hidden(fn (Field $record): bool => $record->is_system)
                         ->successNotification(
                             Notification::make()
                                 ->success()
@@ -87,6 +101,7 @@ class FieldsTable
                                 ->body('The custom field has been deleted.')
                         ),
                     ForceDeleteAction::make()
+                        ->hidden(fn (Field $record): bool => $record->is_system)
                         ->before(function (Field $record) {
                             FieldsColumnManager::deleteColumn($record);
                         })

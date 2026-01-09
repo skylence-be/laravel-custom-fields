@@ -117,4 +117,88 @@ trait HasCustomFields
 
         return $values;
     }
+
+    /**
+     * Get custom field values for API response.
+     * Only includes fields with show_in_api = true.
+     */
+    public function getCustomFieldsForApi(): array
+    {
+        $fields = $this->getCustomFields()
+            ->where('show_in_api', true)
+            ->get();
+
+        $values = [];
+
+        foreach ($fields as $field) {
+            $values[$field->code] = $this->{$field->code};
+        }
+
+        return $values;
+    }
+
+    /**
+     * Get validation rules for custom fields.
+     * Only includes fields with is_required = true.
+     *
+     * @return array<string, string>
+     */
+    public static function getCustomFieldValidationRules(): array
+    {
+        $fields = Field::where('customizable_type', static::class)
+            ->where('is_required', true)
+            ->get();
+
+        $rules = [];
+
+        foreach ($fields as $field) {
+            $rules[$field->code] = 'required';
+        }
+
+        return $rules;
+    }
+
+    /**
+     * Get validation rules for custom fields in API requests.
+     * Only includes fields with api_required = true.
+     *
+     * @return array<string, string>
+     */
+    public static function getCustomFieldApiValidationRules(): array
+    {
+        $fields = Field::where('customizable_type', static::class)
+            ->where('show_in_api', true)
+            ->where('api_required', true)
+            ->get();
+
+        $rules = [];
+
+        foreach ($fields as $field) {
+            $rules[$field->code] = 'required';
+        }
+
+        return $rules;
+    }
+
+    /**
+     * Get all custom field definitions for this model.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection<int, Field>
+     */
+    public static function getCustomFieldDefinitions()
+    {
+        return Field::where('customizable_type', static::class)->get();
+    }
+
+    /**
+     * Get custom field definitions visible in API.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection<int, Field>
+     */
+    public static function getApiCustomFieldDefinitions()
+    {
+        return Field::where('customizable_type', static::class)
+            ->where('show_in_api', true)
+            ->get();
+    }
 }
