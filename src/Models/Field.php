@@ -29,6 +29,10 @@ class Field extends Model implements Sortable
             'table_settings' => 'array',
             'infolist_settings' => 'array',
             'use_in_table' => 'boolean',
+            'is_system' => 'boolean',
+            'is_required' => 'boolean',
+            'show_in_api' => 'boolean',
+            'api_required' => 'boolean',
         ];
     }
 
@@ -48,6 +52,10 @@ class Field extends Model implements Sortable
         'sort',
         'customizable_type',
         'form_section',
+        'is_system',
+        'is_required',
+        'show_in_api',
+        'api_required',
         'created_by',
         'updated_by',
     ];

@@ -8,6 +8,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Xve\LaravelCustomFields\Filament\Resources\FieldResource;
+use Xve\LaravelCustomFields\Models\Field;
 use Xve\LaravelCustomFields\Services\FieldsColumnManager;
 
 class EditField extends EditRecord
@@ -27,7 +28,8 @@ class EditField extends EditRecord
         return [
             $this->getSaveFormAction()->formId('form'),
             $this->getCancelFormAction(),
-            DeleteAction::make(),
+            DeleteAction::make()
+                ->hidden(fn (Field $record): bool => $record->is_system),
         ];
     }
 

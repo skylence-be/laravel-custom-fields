@@ -6,6 +6,7 @@ use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Xve\LaravelCustomFields\Commands\LaravelCustomFieldsCommand;
+use Xve\LaravelCustomFields\Commands\SyncSystemFieldsCommand;
 use Xve\LaravelCustomFields\Http\Livewire\FieldActivityLog;
 use Xve\LaravelCustomFields\Http\Livewire\FieldCreate;
 use Xve\LaravelCustomFields\Http\Livewire\FieldEdit;
@@ -32,9 +33,12 @@ class LaravelCustomFieldsServiceProvider extends PackageServiceProvider
                 'add_default_option_to_custom_fields_table',
                 'add_user_tracking_to_custom_fields_table',
                 'create_custom_field_activity_log_table',
+                'add_form_section_to_custom_fields_table',
+                'add_system_and_api_fields_to_custom_fields_table',
             ])
             ->hasRoute('web')
-            ->hasCommand(LaravelCustomFieldsCommand::class);
+            ->hasCommand(LaravelCustomFieldsCommand::class)
+            ->hasCommand(SyncSystemFieldsCommand::class);
     }
 
     public function packageBooted(): void

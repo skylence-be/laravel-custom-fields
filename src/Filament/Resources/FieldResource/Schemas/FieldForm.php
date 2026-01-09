@@ -139,6 +139,20 @@ class FieldForm
                                     ->helperText('Select which section this field appears in'),
                             ]),
 
+                        Section::make('Validation & API')
+                            ->schema([
+                                Toggle::make('is_required')
+                                    ->label('Required')
+                                    ->helperText('Field must be filled in forms'),
+                                Toggle::make('show_in_api')
+                                    ->label('Include in API')
+                                    ->default(true)
+                                    ->helperText('Include this field in API responses'),
+                                Toggle::make('api_required')
+                                    ->label('Required in API')
+                                    ->helperText('Field is required when submitting via API'),
+                            ]),
+
                         Section::make('Default Value')
                             ->schema([
                                 // Text input for text-based fields
