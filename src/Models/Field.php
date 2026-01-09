@@ -3,8 +3,10 @@
 namespace Xve\LaravelCustomFields\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Xve\LaravelCustomFields\Enums\FieldType;
@@ -45,12 +47,36 @@ class Field extends Model implements Sortable
         'infolist_settings',
         'sort',
         'customizable_type',
+        'form_section',
+        'created_by',
+        'updated_by',
     ];
 
     public $sortable = [
         'order_column_name' => 'sort',
         'sort_when_creating' => true,
     ];
+
+    /**
+     * Boot the model.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($field) {
+            if (Auth::check()) {
+                $field->created_by = Auth::id();
+                $field->updated_by = Auth::id();
+            }
+        });
+
+        static::updating(function ($field) {
+            if (Auth::check()) {
+                $field->updated_by = Auth::id();
+            }
+        });
+    }
 
     /**
      * Get the table name for the customizable model.
@@ -165,5 +191,29 @@ class Field extends Model implements Sortable
     public static function getAvailableLocales(): array
     {
         return config('app.locales', ['en']);
+    }
+
+    /**
+     * Get the user who created this field.
+     */
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(config('auth.providers.users.model'), 'created_by');
+    }
+
+    /**
+     * Get the user who last updated this field.
+     */
+    public function updater(): BelongsTo
+    {
+        return $this->belongsTo(config('auth.providers.users.model'), 'updated_by');
+    }
+
+    /**
+     * Get all activity logs for this field.
+     */
+    public function activityLogs(): HasMany
+    {
+        return $this->hasMany(FieldActivityLog::class);
     }
 }
