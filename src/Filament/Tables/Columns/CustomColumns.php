@@ -85,13 +85,10 @@ class CustomColumns extends Component
     protected function createColumn(Field $field): Column
     {
         $columnClass = match ($field->type) {
-            FieldType::TEXT, FieldType::TEXTAREA, FieldType::SELECT, FieldType::RADIO => TextColumn::class,
+            FieldType::TEXT, FieldType::TEXTAREA, FieldType::SELECT, FieldType::RADIO,
+            FieldType::CHECKBOX_LIST, FieldType::DATETIME, FieldType::EDITOR, FieldType::MARKDOWN => TextColumn::class,
             FieldType::CHECKBOX, FieldType::TOGGLE => IconColumn::class,
-            FieldType::CHECKBOX_LIST => TextColumn::class,
-            FieldType::DATETIME => TextColumn::class,
-            FieldType::EDITOR, FieldType::MARKDOWN => TextColumn::class,
             FieldType::COLOR => ColorColumn::class,
-            default => TextColumn::class,
         };
 
         $column = $columnClass::make($field->code)

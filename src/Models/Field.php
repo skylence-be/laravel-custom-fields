@@ -12,6 +12,33 @@ use Spatie\EloquentSortable\SortableTrait;
 use Skylence\LaravelCustomFields\Enums\FieldType;
 use Skylence\LaravelCustomFields\Enums\TextInputType;
 
+/**
+ * @property int $id
+ * @property string $code
+ * @property string $name
+ * @property FieldType $type
+ * @property TextInputType|null $input_type
+ * @property bool $is_multiselect
+ * @property string|null $datalist
+ * @property array|null $options
+ * @property string|null $default_option
+ * @property array|null $form_settings
+ * @property bool $use_in_table
+ * @property array|null $table_settings
+ * @property array|null $infolist_settings
+ * @property int $sort
+ * @property string $customizable_type
+ * @property string|null $form_section
+ * @property bool $is_system
+ * @property bool $is_required
+ * @property bool $show_in_api
+ * @property bool $api_required
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ */
 class Field extends Model implements Sortable
 {
     use SoftDeletes, SortableTrait;
@@ -122,11 +149,14 @@ class Field extends Model implements Sortable
 
     /**
      * Get translation for a specific locale.
+     *
+     * @return FieldTranslation|null
      */
     public function translate(?string $locale = null): ?FieldTranslation
     {
         $locale = $locale ?? app()->getLocale();
 
+        /** @var FieldTranslation|null */
         return $this->translations()
             ->where('locale', $locale)
             ->first();
@@ -139,7 +169,7 @@ class Field extends Model implements Sortable
     {
         $translation = $this->translate($locale);
 
-        return $translation?->name ?? $this->name;
+        return $translation->name ?? $this->name;
     }
 
     /**
@@ -149,7 +179,7 @@ class Field extends Model implements Sortable
     {
         $translation = $this->translate($locale);
 
-        return $translation?->options ?? $this->options;
+        return $translation->options ?? $this->options;
     }
 
     /**
@@ -181,9 +211,12 @@ class Field extends Model implements Sortable
 
     /**
      * Set or update translation for a specific locale.
+     *
+     * @return FieldTranslation
      */
     public function setTranslation(string $locale, string $name, ?array $options = null): FieldTranslation
     {
+        /** @var FieldTranslation */
         return $this->translations()->updateOrCreate(
             ['locale' => $locale],
             [

@@ -95,13 +95,11 @@ class FieldsColumnManager
         return match ($field->type) {
             FieldType::TEXT => static::getTextColumnType($field),
             FieldType::TEXTAREA, FieldType::EDITOR, FieldType::MARKDOWN => 'text',
-            FieldType::RADIO => 'string',
+            FieldType::RADIO, FieldType::COLOR => 'string',
             FieldType::SELECT => $field->is_multiselect ? 'json' : 'string',
             FieldType::CHECKBOX, FieldType::TOGGLE => 'boolean',
             FieldType::CHECKBOX_LIST => 'json',
             FieldType::DATETIME => 'datetime',
-            FieldType::COLOR => 'string',
-            default => 'string'
         };
     }
 

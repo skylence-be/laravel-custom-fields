@@ -19,7 +19,7 @@ class FieldCreate extends Component
 
     public function mount(): void
     {
-        $this->form->sort = Field::max('sort') + 1 ?? 0;
+        $this->form->sort = (Field::max('sort') ?? 0) + 1;
         $this->form->initializeTranslations();
     }
 

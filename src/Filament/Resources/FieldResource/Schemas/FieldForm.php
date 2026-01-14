@@ -167,7 +167,7 @@ class FieldForm
                                         FieldType::COLOR,
                                         FieldType::DATETIME,
                                         null,
-                                    ]) || $get('type') === null),
+                                    ]) || ! $get('type')),
 
                                 // Toggle for boolean fields
                                 Toggle::make('default_option')

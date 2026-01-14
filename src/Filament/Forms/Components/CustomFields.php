@@ -113,7 +113,6 @@ class CustomFields extends Component
             FieldType::EDITOR => RichEditor::class,
             FieldType::MARKDOWN => MarkdownEditor::class,
             FieldType::COLOR => ColorPicker::class,
-            default => TextInput::class,
         };
 
         $component = $componentClass::make($field->code)

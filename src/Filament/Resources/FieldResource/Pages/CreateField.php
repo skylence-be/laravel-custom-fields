@@ -167,7 +167,7 @@ class CreateField extends CreateRecord
                                     FieldType::COLOR,
                                     FieldType::DATETIME,
                                     null,
-                                ]) || $get('type') === null),
+                                ]) || ! $get('type')),
 
                             // Toggle for boolean fields
                             Toggle::make('default_option')
@@ -267,7 +267,9 @@ class CreateField extends CreateRecord
 
     protected function afterCreate(): void
     {
-        FieldsColumnManager::createColumn($this->record);
+        /** @var \Skylence\LaravelCustomFields\Models\Field $record */
+        $record = $this->record;
+        FieldsColumnManager::createColumn($record);
     }
 
     protected function getRedirectUrl(): string
