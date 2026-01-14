@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
-use Spatie\EloquentSortable\Sortable;
-use Spatie\EloquentSortable\SortableTrait;
 use Skylence\LaravelCustomFields\Enums\FieldType;
 use Skylence\LaravelCustomFields\Enums\TextInputType;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
 /**
  * @property int $id
@@ -149,8 +149,6 @@ class Field extends Model implements Sortable
 
     /**
      * Get translation for a specific locale.
-     *
-     * @return FieldTranslation|null
      */
     public function translate(?string $locale = null): ?FieldTranslation
     {
@@ -211,8 +209,6 @@ class Field extends Model implements Sortable
 
     /**
      * Set or update translation for a specific locale.
-     *
-     * @return FieldTranslation
      */
     public function setTranslation(string $locale, string $name, ?array $options = null): FieldTranslation
     {

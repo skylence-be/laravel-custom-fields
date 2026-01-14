@@ -3,8 +3,6 @@
 namespace Skylence\LaravelCustomFields;
 
 use Livewire\Livewire;
-use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Skylence\LaravelCustomFields\Commands\LaravelCustomFieldsCommand;
 use Skylence\LaravelCustomFields\Commands\SyncSystemFieldsCommand;
 use Skylence\LaravelCustomFields\Http\Livewire\FieldActivityLog;
@@ -13,6 +11,8 @@ use Skylence\LaravelCustomFields\Http\Livewire\FieldEdit;
 use Skylence\LaravelCustomFields\Http\Livewire\FieldIndex;
 use Skylence\LaravelCustomFields\Models\Field;
 use Skylence\LaravelCustomFields\Observers\FieldObserver;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class LaravelCustomFieldsServiceProvider extends PackageServiceProvider
 {
