@@ -16,6 +16,7 @@ use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Wizard\Step;
 use Filament\Support\Enums\Width;
 use Illuminate\Support\Facades\Schema as DbSchema;
+use Illuminate\Validation\Rules\Unique;
 use Xve\LaravelCustomFields\Enums\FieldType;
 use Xve\LaravelCustomFields\Enums\TextInputType;
 use Xve\LaravelCustomFields\Filament\Resources\FieldResource;
@@ -98,7 +99,11 @@ class CreateField extends CreateRecord
                                 ->required()
                                 ->maxLength(255)
                                 ->helperText('Unique identifier used as the database column name. Use lowercase letters, numbers, and underscores only.')
-                                ->unique(ignoreRecord: true)
+                                ->unique(
+                                    table: 'custom_fields',
+                                    modifyRuleUsing: fn (Unique $rule, Get $get) => $rule->where('customizable_type', $get('customizable_type')),
+                                    ignoreRecord: true,
+                                )
                                 ->notIn(function (Get $get) {
                                     if (! $get('customizable_type')) {
                                         return [];
@@ -221,7 +226,7 @@ class CreateField extends CreateRecord
                                     return empty($sections) ? [] : $sections;
                                 })
                                 ->placeholder('Default (Custom Fields)')
-                                ->helperText('Select which section this field appears in. Leave empty for the default Custom Fields section.'),
+                                ->helperText('Select which section this field appears in for the primary model. Fields created on related models will use the default Custom Fields section.'),
                             Toggle::make('use_in_table')
                                 ->label('Show in Table')
                                 ->default(false)
@@ -239,7 +244,7 @@ class CreateField extends CreateRecord
 
     public function hasSkippableSteps(): bool
     {
-        return true;
+        return false;
     }
 
     protected function getCreatedNotification(): Notification
