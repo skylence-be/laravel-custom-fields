@@ -1,6 +1,6 @@
 <?php
 
-namespace Xve\LaravelCustomFields\Commands;
+namespace Skylence\LaravelCustomFields\Commands;
 
 use Illuminate\Console\Command;
 

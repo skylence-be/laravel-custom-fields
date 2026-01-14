@@ -1,12 +1,12 @@
 <?php
 
-namespace Xve\LaravelCustomFields\Services;
+namespace Skylence\LaravelCustomFields\Services;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Xve\LaravelCustomFields\Enums\FieldType;
-use Xve\LaravelCustomFields\Enums\TextInputType;
-use Xve\LaravelCustomFields\Models\Field;
+use Skylence\LaravelCustomFields\Enums\FieldType;
+use Skylence\LaravelCustomFields\Enums\TextInputType;
+use Skylence\LaravelCustomFields\Models\Field;
 
 class FieldsColumnManager
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Xve\LaravelCustomFields\Enums;
+namespace Skylence\LaravelCustomFields\Enums;
 
 enum FieldType: string
 {

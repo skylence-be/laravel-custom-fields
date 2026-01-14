@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Xve\LaravelCustomFields\Services;
+namespace Skylence\LaravelCustomFields\Services;
 
-use Xve\LaravelCustomFields\Enums\FieldType;
-use Xve\LaravelCustomFields\Models\Field;
+use Skylence\LaravelCustomFields\Enums\FieldType;
+use Skylence\LaravelCustomFields\Models\Field;
 
 class SystemFieldsRegistry
 {

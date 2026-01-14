@@ -1,18 +1,18 @@
 <?php
 
-namespace Xve\LaravelCustomFields;
+namespace Skylence\LaravelCustomFields;
 
 use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Xve\LaravelCustomFields\Commands\LaravelCustomFieldsCommand;
-use Xve\LaravelCustomFields\Commands\SyncSystemFieldsCommand;
-use Xve\LaravelCustomFields\Http\Livewire\FieldActivityLog;
-use Xve\LaravelCustomFields\Http\Livewire\FieldCreate;
-use Xve\LaravelCustomFields\Http\Livewire\FieldEdit;
-use Xve\LaravelCustomFields\Http\Livewire\FieldIndex;
-use Xve\LaravelCustomFields\Models\Field;
-use Xve\LaravelCustomFields\Observers\FieldObserver;
+use Skylence\LaravelCustomFields\Commands\LaravelCustomFieldsCommand;
+use Skylence\LaravelCustomFields\Commands\SyncSystemFieldsCommand;
+use Skylence\LaravelCustomFields\Http\Livewire\FieldActivityLog;
+use Skylence\LaravelCustomFields\Http\Livewire\FieldCreate;
+use Skylence\LaravelCustomFields\Http\Livewire\FieldEdit;
+use Skylence\LaravelCustomFields\Http\Livewire\FieldIndex;
+use Skylence\LaravelCustomFields\Models\Field;
+use Skylence\LaravelCustomFields\Observers\FieldObserver;
 
 class LaravelCustomFieldsServiceProvider extends PackageServiceProvider
 {

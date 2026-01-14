@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Xve\LaravelCustomFields\Commands;
+namespace Skylence\LaravelCustomFields\Commands;
 
 use Illuminate\Console\Command;
-use Xve\LaravelCustomFields\Services\SystemFieldsRegistry;
+use Skylence\LaravelCustomFields\Services\SystemFieldsRegistry;
 
 class SyncSystemFieldsCommand extends Command
 {

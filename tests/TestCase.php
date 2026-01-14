@@ -1,10 +1,10 @@
 <?php
 
-namespace Xve\LaravelCustomFields\Tests;
+namespace Skylence\LaravelCustomFields\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Xve\LaravelCustomFields\LaravelCustomFieldsServiceProvider;
+use Skylence\LaravelCustomFields\LaravelCustomFieldsServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -13,7 +13,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Xve\\LaravelCustomFields\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'Skylence\\LaravelCustomFields\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 

@@ -1,15 +1,18 @@
 <?php
 
-namespace Xve\LaravelCustomFields\Traits;
+namespace Skylence\LaravelCustomFields\Traits;
 
 use Exception;
-use Xve\LaravelCustomFields\Models\Field;
+use Illuminate\Support\Facades\Cache;
+use Skylence\LaravelCustomFields\Models\Field;
 
 trait HasCustomFields
 {
-    protected static mixed $customFillable;
+    /** @var array<class-string, array<string>> */
+    protected static array $customFillableCache = [];
 
-    protected static mixed $customCasts;
+    /** @var array<class-string, \Illuminate\Support\Collection> */
+    protected static array $customCastsCache = [];
 
     /**
      * Boot the trait.
@@ -38,12 +41,46 @@ trait HasCustomFields
      */
     protected function loadCustomFields(): void
     {
+        $class = static::class;
+
+        // Check in-memory cache first (fastest)
+        if (isset(self::$customFillableCache[$class]) && isset(self::$customCastsCache[$class])) {
+            $this->mergeFillable(self::$customFillableCache[$class]);
+            $this->mergeCasts(self::$customCastsCache[$class]);
+
+            return;
+        }
+
         try {
-            $customFields = $this->getCustomFields();
+            $cacheKey = 'custom_fields:'.md5($class);
 
-            $this->mergeFillable(self::$customFillable ??= $customFields->pluck('code')->toArray());
+            // Try Laravel cache (persists across requests)
+            $cached = Cache::get($cacheKey);
 
-            $this->mergeCasts(self::$customCasts ??= $customFields->select('code', 'type', 'is_multiselect')->get());
+            if ($cached !== null) {
+                self::$customFillableCache[$class] = $cached['fillable'];
+                self::$customCastsCache[$class] = collect($cached['casts']);
+
+                $this->mergeFillable(self::$customFillableCache[$class]);
+                $this->mergeCasts(self::$customCastsCache[$class]);
+
+                return;
+            }
+
+            // Query database and cache result
+            $customFields = $this->getCustomFields()->get();
+
+            self::$customFillableCache[$class] = $customFields->pluck('code')->toArray();
+            self::$customCastsCache[$class] = $customFields;
+
+            // Cache for 1 hour (will be invalidated when custom fields change)
+            Cache::put($cacheKey, [
+                'fillable' => self::$customFillableCache[$class],
+                'casts' => $customFields->toArray(),
+            ], 3600);
+
+            $this->mergeFillable(self::$customFillableCache[$class]);
+            $this->mergeCasts(self::$customCastsCache[$class]);
         } catch (Exception $e) {
             // Silently fail if custom_fields table doesn't exist yet
         }

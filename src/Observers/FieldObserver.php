@@ -1,12 +1,12 @@
 <?php
 
-namespace Xve\LaravelCustomFields\Observers;
+namespace Skylence\LaravelCustomFields\Observers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
-use Xve\LaravelCustomFields\Models\Field;
-use Xve\LaravelCustomFields\Models\FieldActivityLog;
-use Xve\LaravelCustomFields\Services\FieldsColumnManager;
+use Skylence\LaravelCustomFields\Models\Field;
+use Skylence\LaravelCustomFields\Models\FieldActivityLog;
+use Skylence\LaravelCustomFields\Services\FieldsColumnManager;
 
 class FieldObserver
 {

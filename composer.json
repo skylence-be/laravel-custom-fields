@@ -1,12 +1,14 @@
 {
-    "name": "xve/laravel-custom-fields",
-    "description": "This is my package laravel-custom-fields",
+    "name": "skylence/laravel-custom-fields",
+    "description": "Dynamic custom fields for Laravel Eloquent models with Filament integration",
     "keywords": [
-        "xve",
+        "skylence",
         "laravel",
-        "laravel-custom-fields"
+        "laravel-custom-fields",
+        "custom-fields",
+        "filament"
     ],
-    "homepage": "https://github.com/xve/laravel-custom-fields",
+    "homepage": "https://github.com/skylence/laravel-custom-fields",
     "license": "MIT",
     "authors": [
         {
@@ -37,13 +39,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Xve\\LaravelCustomFields\\": "src/",
-            "Xve\\LaravelCustomFields\\Database\\Factories\\": "database/factories/"
+            "Skylence\\LaravelCustomFields\\": "src/",
+            "Skylence\\LaravelCustomFields\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Xve\\LaravelCustomFields\\Tests\\": "tests/",
+            "Skylence\\LaravelCustomFields\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
@@ -65,10 +67,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Xve\\LaravelCustomFields\\LaravelCustomFieldsServiceProvider"
+                "Skylence\\LaravelCustomFields\\LaravelCustomFieldsServiceProvider"
             ],
             "aliases": {
-                "LaravelCustomFields": "Xve\\LaravelCustomFields\\Facades\\LaravelCustomFields"
+                "LaravelCustomFields": "Skylence\\LaravelCustomFields\\Facades\\LaravelCustomFields"
             }
         }
     },

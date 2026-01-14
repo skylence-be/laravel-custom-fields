@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xve\LaravelCustomFields\Filament\Tables\Columns;
+namespace Skylence\LaravelCustomFields\Filament\Tables\Columns;
 
 use Filament\Support\Components\Component;
 use Filament\Support\Enums\FontWeight;
@@ -12,8 +12,8 @@ use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Support\Collection;
-use Xve\LaravelCustomFields\Enums\FieldType;
-use Xve\LaravelCustomFields\Models\Field;
+use Skylence\LaravelCustomFields\Enums\FieldType;
+use Skylence\LaravelCustomFields\Models\Field;
 
 class CustomColumns extends Component
 {

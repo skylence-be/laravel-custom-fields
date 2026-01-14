@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xve\LaravelCustomFields\Filament\Forms\Components;
+namespace Skylence\LaravelCustomFields\Filament\Forms\Components;
 
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\CheckboxList;
@@ -17,8 +17,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Component;
 use Illuminate\Support\Collection;
-use Xve\LaravelCustomFields\Enums\FieldType;
-use Xve\LaravelCustomFields\Models\Field;
+use Skylence\LaravelCustomFields\Enums\FieldType;
+use Skylence\LaravelCustomFields\Models\Field;
 
 class CustomFields extends Component
 {

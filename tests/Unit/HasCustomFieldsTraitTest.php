@@ -1,12 +1,12 @@
 <?php
 
-namespace Xve\LaravelCustomFields\Tests\Unit;
+namespace Skylence\LaravelCustomFields\Tests\Unit;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Xve\LaravelCustomFields\Models\Field;
-use Xve\LaravelCustomFields\Tests\TestCase;
-use Xve\LaravelCustomFields\Traits\HasCustomFields;
+use Skylence\LaravelCustomFields\Models\Field;
+use Skylence\LaravelCustomFields\Tests\TestCase;
+use Skylence\LaravelCustomFields\Traits\HasCustomFields;
 
 class HasCustomFieldsTraitTest extends TestCase
 {

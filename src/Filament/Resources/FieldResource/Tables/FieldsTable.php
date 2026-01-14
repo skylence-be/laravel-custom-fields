@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xve\LaravelCustomFields\Filament\Resources\FieldResource\Tables;
+namespace Skylence\LaravelCustomFields\Filament\Resources\FieldResource\Tables;
 
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
@@ -19,10 +19,10 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
-use Xve\LaravelCustomFields\Enums\FieldType;
-use Xve\LaravelCustomFields\Filament\Resources\FieldResource;
-use Xve\LaravelCustomFields\Models\Field;
-use Xve\LaravelCustomFields\Services\FieldsColumnManager;
+use Skylence\LaravelCustomFields\Enums\FieldType;
+use Skylence\LaravelCustomFields\Filament\Resources\FieldResource;
+use Skylence\LaravelCustomFields\Models\Field;
+use Skylence\LaravelCustomFields\Services\FieldsColumnManager;
 
 class FieldsTable
 {

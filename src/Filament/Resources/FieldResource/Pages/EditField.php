@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Xve\LaravelCustomFields\Filament\Resources\FieldResource\Pages;
+namespace Skylence\LaravelCustomFields\Filament\Resources\FieldResource\Pages;
 
 use Filament\Actions\DeleteAction;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
-use Xve\LaravelCustomFields\Filament\Resources\FieldResource;
-use Xve\LaravelCustomFields\Models\Field;
-use Xve\LaravelCustomFields\Services\FieldsColumnManager;
+use Skylence\LaravelCustomFields\Filament\Resources\FieldResource;
+use Skylence\LaravelCustomFields\Models\Field;
+use Skylence\LaravelCustomFields\Services\FieldsColumnManager;
 
 class EditField extends EditRecord
 {
