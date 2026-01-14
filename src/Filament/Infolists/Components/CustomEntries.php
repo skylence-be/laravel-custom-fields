@@ -84,13 +84,10 @@ class CustomEntries extends Component
     protected function createEntry(Field $field): Component
     {
         $entryClass = match ($field->type) {
-            FieldType::TEXT, FieldType::TEXTAREA, FieldType::SELECT, FieldType::RADIO => TextEntry::class,
+            FieldType::TEXT, FieldType::TEXTAREA, FieldType::SELECT, FieldType::RADIO,
+            FieldType::CHECKBOX_LIST, FieldType::DATETIME, FieldType::EDITOR, FieldType::MARKDOWN => TextEntry::class,
             FieldType::CHECKBOX, FieldType::TOGGLE => IconEntry::class,
-            FieldType::CHECKBOX_LIST => TextEntry::class,
-            FieldType::DATETIME => TextEntry::class,
-            FieldType::EDITOR, FieldType::MARKDOWN => TextEntry::class,
             FieldType::COLOR => ColorEntry::class,
-            default => TextEntry::class,
         };
 
         $entry = $entryClass::make($field->code)

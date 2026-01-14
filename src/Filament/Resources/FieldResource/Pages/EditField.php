@@ -40,7 +40,9 @@ class EditField extends EditRecord
 
     protected function afterSave(): void
     {
-        FieldsColumnManager::updateColumn($this->record);
+        /** @var \Skylence\LaravelCustomFields\Models\Field $record */
+        $record = $this->record;
+        FieldsColumnManager::updateColumn($record);
     }
 
     protected function getRedirectUrl(): string

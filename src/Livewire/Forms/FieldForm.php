@@ -42,7 +42,7 @@ class FieldForm extends Form
 
     public function rules(): array
     {
-        $fieldId = $this->field?->id ?? 'NULL';
+        $fieldId = $this->field->id ?? 'NULL';
 
         return [
             'name' => 'required|string|max:255',
@@ -84,8 +84,8 @@ class FieldForm extends Form
 
         $this->name = $field->name;
         $this->code = $field->code;
-        $this->type = $field->type?->value ?? 'text';
-        $this->input_type = $field->input_type?->value ?? 'text';
+        $this->type = $field->type->value ?? 'text';
+        $this->input_type = $field->input_type->value ?? 'text';
         $this->is_multiselect = $field->is_multiselect;
 
         // Convert old array-based options to key-based structure

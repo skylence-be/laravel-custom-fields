@@ -5,6 +5,20 @@ namespace Skylence\LaravelCustomFields\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $id
+ * @property int $field_id
+ * @property int|null $user_id
+ * @property string $event
+ * @property array|null $old_values
+ * @property array|null $new_values
+ * @property array|null $changed_attributes
+ * @property string|null $description
+ * @property string|null $ip_address
+ * @property string|null $user_agent
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ */
 class FieldActivityLog extends Model
 {
     protected $table = 'custom_field_activity_log';

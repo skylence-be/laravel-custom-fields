@@ -167,7 +167,7 @@ class CustomFilters extends Component
         return $filter->label($field->getTranslatedName());
     }
 
-    protected function createConstraint(Field $field): Constraint
+    protected function createConstraint(Field $field): BooleanConstraint|DateConstraint|NumberConstraint|SelectConstraint|TextConstraint
     {
         $constraint = match ($field->type) {
             FieldType::TEXT => match ($field->input_type) {
