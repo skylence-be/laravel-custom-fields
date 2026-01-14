@@ -1,10 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Xve\LaravelCustomFields\Http\Livewire\FieldActivityLog;
-use Xve\LaravelCustomFields\Http\Livewire\FieldCreate;
-use Xve\LaravelCustomFields\Http\Livewire\FieldEdit;
-use Xve\LaravelCustomFields\Http\Livewire\FieldIndex;
+use Skylence\LaravelCustomFields\Http\Livewire\FieldActivityLog;
+use Skylence\LaravelCustomFields\Http\Livewire\FieldCreate;
+use Skylence\LaravelCustomFields\Http\Livewire\FieldEdit;
+use Skylence\LaravelCustomFields\Http\Livewire\FieldIndex;
 
 Route::prefix(config('custom-fields.route.prefix'))
     ->middleware(config('custom-fields.route.middleware'))

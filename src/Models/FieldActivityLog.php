@@ -1,6 +1,6 @@
 <?php
 
-namespace Xve\LaravelCustomFields\Models;
+namespace Skylence\LaravelCustomFields\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

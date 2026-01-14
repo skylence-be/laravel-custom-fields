@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xve\LaravelCustomFields\Filament\Tables\Filters;
+namespace Skylence\LaravelCustomFields\Filament\Tables\Filters;
 
 use Filament\Support\Components\Component;
 use Filament\Tables\Filters\BaseFilter;
@@ -16,9 +16,9 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
-use Xve\LaravelCustomFields\Enums\FieldType;
-use Xve\LaravelCustomFields\Enums\TextInputType;
-use Xve\LaravelCustomFields\Models\Field;
+use Skylence\LaravelCustomFields\Enums\FieldType;
+use Skylence\LaravelCustomFields\Enums\TextInputType;
+use Skylence\LaravelCustomFields\Models\Field;
 
 class CustomFilters extends Component
 {

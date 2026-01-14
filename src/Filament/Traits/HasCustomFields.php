@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Xve\LaravelCustomFields\Filament\Traits;
+namespace Skylence\LaravelCustomFields\Filament\Traits;
 
-use Xve\LaravelCustomFields\Filament\Forms\Components\CustomFields;
-use Xve\LaravelCustomFields\Filament\Infolists\Components\CustomEntries;
-use Xve\LaravelCustomFields\Filament\Tables\Columns\CustomColumns;
-use Xve\LaravelCustomFields\Filament\Tables\Filters\CustomFilters;
+use Skylence\LaravelCustomFields\Filament\Forms\Components\CustomFields;
+use Skylence\LaravelCustomFields\Filament\Infolists\Components\CustomEntries;
+use Skylence\LaravelCustomFields\Filament\Tables\Columns\CustomColumns;
+use Skylence\LaravelCustomFields\Filament\Tables\Filters\CustomFilters;
 
 trait HasCustomFields
 {

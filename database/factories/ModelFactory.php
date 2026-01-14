@@ -1,6 +1,6 @@
 <?php
 
-namespace Xve\LaravelCustomFields\Database\Factories;
+namespace Skylence\LaravelCustomFields\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 

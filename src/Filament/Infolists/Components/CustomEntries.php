@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xve\LaravelCustomFields\Filament\Infolists\Components;
+namespace Skylence\LaravelCustomFields\Filament\Infolists\Components;
 
 use Filament\Infolists\Components\ColorEntry;
 use Filament\Infolists\Components\Entry;
@@ -12,8 +12,8 @@ use Filament\Schemas\Components\Component;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\TextSize;
 use Illuminate\Support\Collection;
-use Xve\LaravelCustomFields\Enums\FieldType;
-use Xve\LaravelCustomFields\Models\Field;
+use Skylence\LaravelCustomFields\Enums\FieldType;
+use Skylence\LaravelCustomFields\Models\Field;
 
 class CustomEntries extends Component
 {

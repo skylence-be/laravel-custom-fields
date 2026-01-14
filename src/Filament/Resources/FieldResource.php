@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xve\LaravelCustomFields\Filament\Resources;
+namespace Skylence\LaravelCustomFields\Filament\Resources;
 
 use BackedEnum;
 use Filament\Facades\Filament;
@@ -10,13 +10,13 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use Xve\LaravelCustomFields\Filament\Resources\FieldResource\Pages\CreateField;
-use Xve\LaravelCustomFields\Filament\Resources\FieldResource\Pages\EditField;
-use Xve\LaravelCustomFields\Filament\Resources\FieldResource\Pages\ListFields;
-use Xve\LaravelCustomFields\Filament\Resources\FieldResource\Schemas\FieldForm;
-use Xve\LaravelCustomFields\Filament\Resources\FieldResource\Tables\FieldsTable;
-use Xve\LaravelCustomFields\Filament\Traits\HasCustomFields;
-use Xve\LaravelCustomFields\Models\Field;
+use Skylence\LaravelCustomFields\Filament\Resources\FieldResource\Pages\CreateField;
+use Skylence\LaravelCustomFields\Filament\Resources\FieldResource\Pages\EditField;
+use Skylence\LaravelCustomFields\Filament\Resources\FieldResource\Pages\ListFields;
+use Skylence\LaravelCustomFields\Filament\Resources\FieldResource\Schemas\FieldForm;
+use Skylence\LaravelCustomFields\Filament\Resources\FieldResource\Tables\FieldsTable;
+use Skylence\LaravelCustomFields\Filament\Traits\HasCustomFields;
+use Skylence\LaravelCustomFields\Models\Field;
 
 class FieldResource extends Resource
 {

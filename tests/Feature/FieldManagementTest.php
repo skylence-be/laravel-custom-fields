@@ -1,14 +1,14 @@
 <?php
 
-namespace Xve\LaravelCustomFields\Tests\Feature;
+namespace Skylence\LaravelCustomFields\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
-use Xve\LaravelCustomFields\Http\Livewire\FieldCreate;
-use Xve\LaravelCustomFields\Http\Livewire\FieldEdit;
-use Xve\LaravelCustomFields\Http\Livewire\FieldIndex;
-use Xve\LaravelCustomFields\Models\Field;
-use Xve\LaravelCustomFields\Tests\TestCase;
+use Skylence\LaravelCustomFields\Http\Livewire\FieldCreate;
+use Skylence\LaravelCustomFields\Http\Livewire\FieldEdit;
+use Skylence\LaravelCustomFields\Http\Livewire\FieldIndex;
+use Skylence\LaravelCustomFields\Models\Field;
+use Skylence\LaravelCustomFields\Tests\TestCase;
 
 class FieldManagementTest extends TestCase
 {

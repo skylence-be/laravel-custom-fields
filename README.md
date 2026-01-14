@@ -91,7 +91,7 @@ Add the `HasCustomFields` trait to any model you want to support custom fields:
 
 ```php
 use Illuminate\Database\Eloquent\Model;
-use Xve\LaravelCustomFields\Traits\HasCustomFields;
+use Skylence\LaravelCustomFields\Traits\HasCustomFields;
 
 class Employee extends Model
 {
@@ -200,7 +200,7 @@ All routes are protected by the middleware specified in the config file (default
 You can also create fields programmatically:
 
 ```php
-use Xve\LaravelCustomFields\Models\Field;
+use Skylence\LaravelCustomFields\Models\Field;
 
 Field::create([
     'name' => 'Employee Rating',

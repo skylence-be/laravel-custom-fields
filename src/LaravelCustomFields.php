@@ -1,5 +1,5 @@
 <?php
 
-namespace Xve\LaravelCustomFields;
+namespace Skylence\LaravelCustomFields;
 
 class LaravelCustomFields {}

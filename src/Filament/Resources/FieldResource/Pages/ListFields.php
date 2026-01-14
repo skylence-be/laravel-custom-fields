@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Xve\LaravelCustomFields\Filament\Resources\FieldResource\Pages;
+namespace Skylence\LaravelCustomFields\Filament\Resources\FieldResource\Pages;
 
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
-use Xve\LaravelCustomFields\Filament\Resources\FieldResource;
+use Skylence\LaravelCustomFields\Filament\Resources\FieldResource;
 
 class ListFields extends ListRecords
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xve\LaravelCustomFields\Filament\Resources\FieldResource\Pages;
+namespace Skylence\LaravelCustomFields\Filament\Resources\FieldResource\Pages;
 
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Repeater;
@@ -17,10 +17,10 @@ use Filament\Schemas\Components\Wizard\Step;
 use Filament\Support\Enums\Width;
 use Illuminate\Support\Facades\Schema as DbSchema;
 use Illuminate\Validation\Rules\Unique;
-use Xve\LaravelCustomFields\Enums\FieldType;
-use Xve\LaravelCustomFields\Enums\TextInputType;
-use Xve\LaravelCustomFields\Filament\Resources\FieldResource;
-use Xve\LaravelCustomFields\Services\FieldsColumnManager;
+use Skylence\LaravelCustomFields\Enums\FieldType;
+use Skylence\LaravelCustomFields\Enums\TextInputType;
+use Skylence\LaravelCustomFields\Filament\Resources\FieldResource;
+use Skylence\LaravelCustomFields\Services\FieldsColumnManager;
 
 class CreateField extends CreateRecord
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace Xve\LaravelCustomFields\Livewire\Forms;
+namespace Skylence\LaravelCustomFields\Livewire\Forms;
 
 use Illuminate\Validation\Rule;
 use Livewire\Form;
-use Xve\LaravelCustomFields\Enums\FieldType;
-use Xve\LaravelCustomFields\Enums\ValidationRule;
-use Xve\LaravelCustomFields\Models\Field;
+use Skylence\LaravelCustomFields\Enums\FieldType;
+use Skylence\LaravelCustomFields\Enums\ValidationRule;
+use Skylence\LaravelCustomFields\Models\Field;
 
 class FieldForm extends Form
 {

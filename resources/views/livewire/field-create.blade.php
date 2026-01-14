@@ -334,7 +334,7 @@
                             <div class="flex items-center gap-2 p-3 bg-gray-50 dark:bg-gray-700 rounded">
                                 <div class="flex-1">
                                     <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                        {{ \Xve\LaravelCustomFields\Enums\ValidationRule::toHumanReadable($rule) }}
+                                        {{ \Skylence\LaravelCustomFields\Enums\ValidationRule::toHumanReadable($rule) }}
                                     </span>
                                     <code class="block text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ $rule }}</code>
                                 </div>

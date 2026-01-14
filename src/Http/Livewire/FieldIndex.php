@@ -1,10 +1,10 @@
 <?php
 
-namespace Xve\LaravelCustomFields\Http\Livewire;
+namespace Skylence\LaravelCustomFields\Http\Livewire;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use Xve\LaravelCustomFields\Models\Field;
+use Skylence\LaravelCustomFields\Models\Field;
 
 class FieldIndex extends Component
 {

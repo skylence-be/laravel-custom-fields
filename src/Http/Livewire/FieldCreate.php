@@ -1,11 +1,11 @@
 <?php
 
-namespace Xve\LaravelCustomFields\Http\Livewire;
+namespace Skylence\LaravelCustomFields\Http\Livewire;
 
 use Livewire\Component;
-use Xve\LaravelCustomFields\Livewire\Forms\FieldForm;
-use Xve\LaravelCustomFields\Models\Field;
-use Xve\LaravelCustomFields\Services\FieldsColumnManager;
+use Skylence\LaravelCustomFields\Livewire\Forms\FieldForm;
+use Skylence\LaravelCustomFields\Models\Field;
+use Skylence\LaravelCustomFields\Services\FieldsColumnManager;
 
 class FieldCreate extends Component
 {

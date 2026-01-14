@@ -1,6 +1,6 @@
 <?php
 
-// config for Xve/LaravelCustomFields
+// config for Skylence/LaravelCustomFields
 return [
 
     /**
