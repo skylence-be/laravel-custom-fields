@@ -59,7 +59,7 @@ trait HasCustomFields
 
             if ($cached !== null) {
                 self::$customFillableCache[$class] = $cached['fillable'];
-                self::$customCastsCache[$class] = collect($cached['casts']);
+                self::$customCastsCache[$class] = collect($cached['casts'])->map(fn ($item) => (object) $item);
 
                 $this->mergeFillable(self::$customFillableCache[$class]);
                 $this->mergeCasts(self::$customCastsCache[$class]);
