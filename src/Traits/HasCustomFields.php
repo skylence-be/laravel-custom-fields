@@ -2,6 +2,7 @@
 
 namespace Skylence\LaravelCustomFields\Traits;
 
+use BackedEnum;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Skylence\LaravelCustomFields\Models\Field;
@@ -104,22 +105,44 @@ trait HasCustomFields
 
     /**
      * Add custom fields to casts.
+     *
+     * Skips attributes that already have a model-defined cast
+     * to prevent overwriting enum/state casts with primitive types.
      */
     public function mergeCasts($attributes): void
     {
         if (is_array($attributes)) {
-            parent::mergeCasts($attributes);
+            $modelCasts = $this->casts();
+            $safe = array_diff_key($attributes, $modelCasts);
+
+            if ($safe !== []) {
+                parent::mergeCasts($safe);
+            }
 
             return;
         }
 
+        $modelCasts = $this->casts();
+
         foreach ($attributes as $attribute) {
-            match ($attribute->type) {
-                'select' => $this->casts[$attribute->code] = $attribute->is_multiselect ? 'array' : 'string',
-                'checkbox' => $this->casts[$attribute->code] = 'boolean',
-                'toggle' => $this->casts[$attribute->code] = 'boolean',
-                'checkbox_list' => $this->casts[$attribute->code] = 'array',
-                default => $this->casts[$attribute->code] = 'string',
+            // Support both Field model objects and arrays (from cache deserialization)
+            $code = is_array($attribute) ? ($attribute['code'] ?? null) : ($attribute->code ?? null);
+
+            if ($code === null || isset($modelCasts[$code])) {
+                continue;
+            }
+
+            $type = is_array($attribute) ? ($attribute['type'] ?? null) : ($attribute->type ?? null);
+            $isMultiselect = is_array($attribute) ? ($attribute['is_multiselect'] ?? false) : ($attribute->is_multiselect ?? false);
+
+            // Handle both FieldType enum instances and plain string values
+            $typeValue = $type instanceof BackedEnum ? $type->value : (string) $type;
+
+            match ($typeValue) {
+                'select' => $this->casts[$code] = $isMultiselect ? 'array' : 'string',
+                'checkbox', 'toggle' => $this->casts[$code] = 'boolean',
+                'checkbox_list' => $this->casts[$code] = 'array',
+                default => $this->casts[$code] = 'string',
             };
         }
     }
