@@ -26,6 +26,8 @@ class CustomFields extends Component
 
     protected array $exclude = [];
 
+    protected bool $excludeSystem = true;
+
     protected ?string $resourceClass = null;
 
     protected ?string $section = null;
@@ -54,6 +56,13 @@ class CustomFields extends Component
     public function exclude(array $fields): static
     {
         $this->exclude = $fields;
+
+        return $this;
+    }
+
+    public function excludeSystem(bool $excludeSystem = true): static
+    {
+        $this->excludeSystem = $excludeSystem;
 
         return $this;
     }
@@ -90,6 +99,10 @@ class CustomFields extends Component
 
         if (! empty($this->exclude)) {
             $query->whereNotIn('code', $this->exclude);
+        }
+
+        if ($this->excludeSystem) {
+            $query->where('is_system', false);
         }
 
         if ($this->section !== null) {
