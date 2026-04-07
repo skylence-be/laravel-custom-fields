@@ -150,15 +150,23 @@ class CustomFields extends Component
             }
         }
 
-        if (in_array($field->type, [FieldType::SELECT, FieldType::RADIO, FieldType::CHECKBOX_LIST]) && ! empty($field->options)) {
-            $component->options(function () use ($field) {
-                return collect($field->getTranslatedOptions())
-                    ->mapWithKeys(fn ($option) => [$option => $option])
-                    ->toArray();
-            });
+        if (in_array($field->type, [FieldType::SELECT, FieldType::RADIO, FieldType::CHECKBOX_LIST])) {
+            $effectiveOptions = $field->getEffectiveOptions();
 
-            if ($field->is_multiselect && method_exists($component, 'multiple')) {
-                $component->multiple();
+            if (! empty($effectiveOptions)) {
+                $component->options(function () use ($field, $effectiveOptions) {
+                    if ($field->hasEnumClass()) {
+                        return $effectiveOptions;
+                    }
+
+                    return collect($field->getTranslatedOptions())
+                        ->mapWithKeys(fn ($option) => [$option => $option])
+                        ->toArray();
+                });
+
+                if ($field->is_multiselect && method_exists($component, 'multiple')) {
+                    $component->multiple();
+                }
             }
         }
 
