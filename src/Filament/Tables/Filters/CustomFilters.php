@@ -80,6 +80,10 @@ class CustomFilters extends Component
 
     protected function getFields(): Collection
     {
+        if (! \Illuminate\Support\Facades\Schema::hasTable('custom_fields')) {
+            return collect();
+        }
+
         $query = Field::query()
             ->where('customizable_type', $this->getResourceClass()::getModel())
             ->where('use_in_table', true);
