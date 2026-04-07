@@ -21,6 +21,7 @@ use Spatie\EloquentSortable\SortableTrait;
  * @property bool $is_multiselect
  * @property string|null $datalist
  * @property array|null $options
+ * @property string|null $enum_class
  * @property string|null $default_option
  * @property array|null $form_settings
  * @property bool $use_in_table
@@ -71,6 +72,7 @@ class Field extends Model implements Sortable
         'is_multiselect',
         'datalist',
         'options',
+        'enum_class',
         'default_option',
         'form_settings',
         'use_in_table',
@@ -178,6 +180,58 @@ class Field extends Model implements Sortable
         $translation = $this->translate($locale);
 
         return $translation->options ?? $this->options;
+    }
+
+    /**
+     * Check if options are driven by a PHP enum.
+     */
+    public function hasEnumClass(): bool
+    {
+        return ! empty($this->enum_class) && enum_exists($this->enum_class);
+    }
+
+    /**
+     * Get options from the associated enum class.
+     *
+     * @return array<string, string>
+     */
+    public function getEnumOptions(): array
+    {
+        if (! $this->hasEnumClass()) {
+            return [];
+        }
+
+        $enumClass = $this->enum_class;
+
+        if (method_exists($enumClass, 'options')) {
+            return $enumClass::options();
+        }
+
+        return collect($enumClass::cases())
+            ->mapWithKeys(fn ($case): array => [
+                $case->value => method_exists($case, 'getLabel') ? $case->getLabel() : $case->name,
+            ])
+            ->all();
+    }
+
+    /**
+     * Get effective options (enum-based or manually defined).
+     *
+     * @return array<string, string>
+     */
+    public function getEffectiveOptions(): array
+    {
+        if ($this->hasEnumClass()) {
+            return $this->getEnumOptions();
+        }
+
+        if (! empty($this->options)) {
+            return collect($this->options)
+                ->mapWithKeys(fn ($option) => [$option => $option])
+                ->toArray();
+        }
+
+        return [];
     }
 
     /**

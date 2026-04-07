@@ -35,6 +35,7 @@ class LaravelCustomFieldsServiceProvider extends PackageServiceProvider
                 'create_custom_field_activity_log_table',
                 'add_form_section_to_custom_fields_table',
                 'add_system_and_api_fields_to_custom_fields_table',
+                'add_enum_class_to_custom_fields_table',
             ])
             ->hasRoute('web')
             ->hasCommand(LaravelCustomFieldsCommand::class)

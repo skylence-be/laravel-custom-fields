@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Skylence\LaravelCustomFields\Filament\Resources\FieldResource\Schemas;
 
 use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -14,9 +15,13 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Schema as DbSchema;
+use Illuminate\Support\HtmlString;
 use Skylence\LaravelCustomFields\Enums\FieldType;
 use Skylence\LaravelCustomFields\Enums\TextInputType;
 use Skylence\LaravelCustomFields\Filament\Resources\FieldResource;
+use Skylence\LaravelCustomFields\Models\Field;
+
+use Illuminate\Database\Eloquent\Model;
 
 class FieldForm
 {
@@ -55,12 +60,48 @@ class FieldForm
                             ])
                             ->columns(2),
 
+                        Section::make('Options (from Enum)')
+                            ->visible(function (Get $get, $livewire): bool {
+                                if (! in_array($get('type'), [FieldType::SELECT, FieldType::CHECKBOX_LIST, FieldType::RADIO])) {
+                                    return false;
+                                }
+
+                                $record = $livewire->record ?? null;
+
+                                return $record instanceof Field && $record->hasEnumClass();
+                            })
+                            ->schema([
+                                Placeholder::make('enum_class_display')
+                                    ->label('Source')
+                                    ->content(fn ($livewire): string => class_basename($livewire->record?->enum_class ?? '')),
+                                Placeholder::make('enum_options_display')
+                                    ->label('Values')
+                                    ->content(function ($livewire): HtmlString {
+                                        $record = $livewire->record ?? null;
+
+                                        if (! $record instanceof Field || ! $record->hasEnumClass()) {
+                                            return new HtmlString('<span class="text-gray-400">No enum configured</span>');
+                                        }
+
+                                        $options = $record->getEnumOptions();
+                                        $items = collect($options)
+                                            ->map(fn (string $label, string $value): string => '<li><span class="font-mono text-xs text-gray-500 dark:text-gray-400">' . e($value) . '</span> &mdash; ' . e($label) . '</li>')
+                                            ->implode('');
+
+                                        return new HtmlString('<ul class="list-disc list-inside space-y-1">' . $items . '</ul>');
+                                    }),
+                            ]),
+
                         Section::make('Options')
-                            ->visible(fn (Get $get): bool => in_array($get('type'), [
-                                FieldType::SELECT,
-                                FieldType::CHECKBOX_LIST,
-                                FieldType::RADIO,
-                            ]))
+                            ->visible(function (Get $get, $livewire): bool {
+                                if (! in_array($get('type'), [FieldType::SELECT, FieldType::CHECKBOX_LIST, FieldType::RADIO])) {
+                                    return false;
+                                }
+
+                                $record = $livewire->record ?? null;
+
+                                return ! ($record instanceof Field && $record->hasEnumClass());
+                            })
                             ->schema([
                                 Repeater::make('options')
                                     ->hiddenLabel()
