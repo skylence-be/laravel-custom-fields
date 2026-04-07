@@ -21,8 +21,6 @@ use Skylence\LaravelCustomFields\Enums\TextInputType;
 use Skylence\LaravelCustomFields\Filament\Resources\FieldResource;
 use Skylence\LaravelCustomFields\Models\Field;
 
-use Illuminate\Database\Eloquent\Model;
-
 class FieldForm
 {
     public static function configure(Schema $schema): Schema
@@ -85,10 +83,10 @@ class FieldForm
 
                                         $options = $record->getEnumOptions();
                                         $items = collect($options)
-                                            ->map(fn (string $label, string $value): string => '<li><span class="font-mono text-xs text-gray-500 dark:text-gray-400">' . e($value) . '</span> &mdash; ' . e($label) . '</li>')
+                                            ->map(fn (string $label, string $value): string => '<li><span class="font-mono text-xs text-gray-500 dark:text-gray-400">'.e($value).'</span> &mdash; '.e($label).'</li>')
                                             ->implode('');
 
-                                        return new HtmlString('<ul class="list-disc list-inside space-y-1">' . $items . '</ul>');
+                                        return new HtmlString('<ul class="list-disc list-inside space-y-1">'.$items.'</ul>');
                                     }),
                             ]),
 

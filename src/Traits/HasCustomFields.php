@@ -4,6 +4,7 @@ namespace Skylence\LaravelCustomFields\Traits;
 
 use BackedEnum;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Skylence\LaravelCustomFields\Models\Field;
 
@@ -12,7 +13,7 @@ trait HasCustomFields
     /** @var array<class-string, array<string>> */
     protected static array $customFillableCache = [];
 
-    /** @var array<class-string, \Illuminate\Support\Collection> */
+    /** @var array<class-string, Collection> */
     protected static array $customCastsCache = [];
 
     /**
