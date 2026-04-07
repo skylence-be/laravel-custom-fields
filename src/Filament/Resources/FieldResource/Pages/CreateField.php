@@ -20,6 +20,7 @@ use Illuminate\Validation\Rules\Unique;
 use Skylence\LaravelCustomFields\Enums\FieldType;
 use Skylence\LaravelCustomFields\Enums\TextInputType;
 use Skylence\LaravelCustomFields\Filament\Resources\FieldResource;
+use Skylence\LaravelCustomFields\Models\Field;
 use Skylence\LaravelCustomFields\Services\FieldsColumnManager;
 
 class CreateField extends CreateRecord
@@ -267,7 +268,7 @@ class CreateField extends CreateRecord
 
     protected function afterCreate(): void
     {
-        /** @var \Skylence\LaravelCustomFields\Models\Field $record */
+        /** @var Field $record */
         $record = $this->record;
         FieldsColumnManager::createColumn($record);
     }
