@@ -17,6 +17,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Component;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Schema;
 use Skylence\LaravelCustomFields\Enums\FieldType;
 use Skylence\LaravelCustomFields\Models\Field;
 
@@ -90,7 +91,7 @@ class CustomFields extends Component
 
     protected function getFields(): Collection
     {
-        if (! \Illuminate\Support\Facades\Schema::hasTable('custom_fields')) {
+        if (! Schema::hasTable('custom_fields')) {
             return collect();
         }
 

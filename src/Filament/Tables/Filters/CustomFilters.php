@@ -15,6 +15,7 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Schema;
 use Skylence\LaravelCustomFields\Enums\FieldType;
 use Skylence\LaravelCustomFields\Enums\TextInputType;
 use Skylence\LaravelCustomFields\Models\Field;
@@ -80,7 +81,7 @@ class CustomFilters extends Component
 
     protected function getFields(): Collection
     {
-        if (! \Illuminate\Support\Facades\Schema::hasTable('custom_fields')) {
+        if (! Schema::hasTable('custom_fields')) {
             return collect();
         }
 

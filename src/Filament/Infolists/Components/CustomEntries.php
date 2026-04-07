@@ -12,6 +12,7 @@ use Filament\Schemas\Components\Component;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\TextSize;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Schema;
 use Skylence\LaravelCustomFields\Enums\FieldType;
 use Skylence\LaravelCustomFields\Models\Field;
 
@@ -67,7 +68,7 @@ class CustomEntries extends Component
 
     protected function getFields(): Collection
     {
-        if (! \Illuminate\Support\Facades\Schema::hasTable('custom_fields')) {
+        if (! Schema::hasTable('custom_fields')) {
             return collect();
         }
 

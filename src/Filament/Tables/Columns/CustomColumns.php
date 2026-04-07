@@ -12,6 +12,7 @@ use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Schema;
 use Skylence\LaravelCustomFields\Enums\FieldType;
 use Skylence\LaravelCustomFields\Models\Field;
 
@@ -62,7 +63,7 @@ class CustomColumns extends Component
 
     protected function getFields(): Collection
     {
-        if (! \Illuminate\Support\Facades\Schema::hasTable('custom_fields')) {
+        if (! Schema::hasTable('custom_fields')) {
             return collect();
         }
 
